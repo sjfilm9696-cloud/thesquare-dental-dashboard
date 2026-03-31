@@ -221,4 +221,21 @@ body{font-family:'Pretendard Variable',-apple-system,'Apple SD Gothic Neo',sans-
   .kpi-grid,.kpi-grid.four{grid-template-columns:1fr}
   .heat-row{grid-template-columns:repeat(7,1fr)}
   .update-badge{display:none}
+
+  .chart-box{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .chart-box canvas{min-width:600px !important}
+  
+  .data-table-wrap, .card {overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .data-table{min-width:500px}
 }
+
+.heatmap-desktop { display: block; }
+.heatmap-mobile { display: none; }
+
+@media(max-width:768px){
+  .heatmap-desktop { display: none !important; }
+  .heatmap-mobile { display: flex !important; flex-direction: column; gap: 12px; }
+}
+
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }

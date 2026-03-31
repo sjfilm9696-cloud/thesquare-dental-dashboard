@@ -74,21 +74,16 @@ var strategies = [
 
 // 조회수 변동 분석
 var tlData = [
-  {period:'2025년 1~3월',cls:'caution',title:'신규 업로드 없이 3개월 — 조회수 점진 하락',
-    body:'이 기간 동안 <strong>신규 영상 업로드가 없었습니다.</strong> 기존 영상의 자연 검색 트래픽으로만 유지되었으며, 일 평균 2,200대. 유튜브는 <strong>최근 활동이 있는 채널을 우선적으로 추천</strong>하기 때문에, 업로드 공백이 길어질수록 추천 빈도가 줄어듭니다.',
-    tags:[['tag-upload','업로드 공백'],['tag-algo','추천 감소']]},
-  {period:'2025년 4월 초',cls:'positive',title:'특정 영상 바이럴 — 일 조회수 12,000회 돌파',
-    body:'4/5~4/9 일 최대 12,425회 급등 후 12일 만에 2,168회로 복귀. <strong>유튜브에서 자주 나타나는 정상적인 바이럴 후 보정</strong> 현상입니다.<br><strong>긍정적 점:</strong> 4월 하순에 후속 영상을 빠르게 업로드하여 2차 상승(4,000~5,700) 유도 성공.',
-    tags:[['tag-viral','바이럴 후 보정'],['tag-upload','후속 업로드 효과']]},
-  {period:'2025년 5월 초',cls:'caution',title:'연휴 기간 시청량 자연 감소',
-    body:'어린이날 연휴 전후로 일 1,937회까지 하락. <strong>공휴일에는 의료 정보 검색 수요가 줄어드는</strong> 계절적 특성입니다.',
-    tags:[['tag-season','공휴일 효과'],['tag-content','의료정보 탐색 감소']]},
-  {period:'2025년 8~9월 최고점 → 10~11월',cls:'caution',title:'2개월간 절반 수준으로 하락',
-    body:'9월 월간 15.5만회(최고) → 11월 7.8만회. 원인: ① 8~9월 집중 업로드 후 <strong>시청자 피로</strong> ② 10월 중후반 <strong>업로드 간격 확대</strong> ③ <strong>연말 전 소강기</strong>.<br><strong>참고:</strong> 이 시기 매출(10월 1,588만원)은 오히려 좋았음 → 시간차를 두고 내원.',
-    tags:[['tag-algo','시청자 피로'],['tag-upload','업로드 간격'],['tag-season','계절 비수기']]},
-  {period:'2026년 2~3월',cls:'caution',title:'꾸준히 업로드했지만 히트 영상 부재',
-    body:'일 2,500회 수준 정체. <strong>업로드 빈도보다 시청자가 클릭하고 싶은 제목·썸네일 전략</strong>과 인트로 구성에 더 신경 쓸 필요가 있습니다.',
-    tags:[['tag-content','콘텐츠 매력도'],['tag-algo','초기 반응 부족']]},
+  {period:'1~3월',cls:'caution',title:'조회수 7만대 (최저)',
+    body:'업로드 2편뿐. 쇼츠 운영 전이라 채널 노출이 낮았던 시기.'},
+  {period:'4월',cls:'positive',title:'14만회 (쇼츠 시작)',
+    body:'쇼츠 12편 첫 운영. 채널 조회수가 약 2배로 상승.'},
+  {period:'9월',cls:'positive',title:'15.5만회 (역대 최고)',
+    body:'쇼츠 9편 + 기존 영상 추천 활발. 누적 업로드 효과가 정점에 도달.'},
+  {period:'10~11월',cls:'caution',title:'7.8만회 (절반 하락)',
+    body:'쇼츠 9편→0편. 다만 매출은 10월 1,588만원으로 양호.'},
+  {period:'12월',cls:'positive',title:'13.1만회 (회복)',
+    body:'쇼츠 10편 재개. 잇몸 시리즈가 연속 히트.'}
 ];
 
 // ===== 유틸리티 함수 =====
@@ -96,6 +91,13 @@ function fmtM(n){return Math.round(n/10000).toLocaleString()+'만';}
 function fmtV(n) {
   if (n >= 10000) return (n / 10000).toFixed(1) + '만';
   return n.toLocaleString();
+}
+function fmtWatch(hours, views) {
+  if (!views) return '0초';
+  const avgSec = Math.round(hours * 3600 / views);
+  const m = Math.floor(avgSec / 60);
+  const s = avgSec % 60;
+  return m + '분 ' + s + '초';
 }
 
 // 쉬운 비교 문구 (퍼센트 사용 금지)

@@ -106,8 +106,14 @@ function _initYtPage() {
   const tl=document.getElementById('yt-tl');
   if(tl&&!tl.children.length){
     tlData.forEach(d=>{
-      const tags=d.tags.map(t=>`<span class="tl-tag ${t[0]}">${t[1]}</span>`).join('');
-      tl.innerHTML+=`<div class="tl-item ${d.cls}"><div class="tl-period">${d.period}</div><div class="tl-title">${d.title}</div><div class="tl-body">${d.body}<br>${tags}</div></div>`;
+      const isUp = d.cls === 'positive';
+      const icon = isUp ? '📈' : '📉';
+      tl.innerHTML += `<details style="background:var(--g50);border:1px solid var(--g200);border-radius:12px;margin-bottom:12px;overflow:hidden">
+        <summary style="padding:16px 20px;font-weight:700;font-size:14px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px">
+          <span>${icon}</span> <span>${d.period} — ${d.title}</span><span style="margin-left:auto;color:var(--g500);font-size:12px;opacity:0.8">자세히 보기 ▼</span>
+        </summary>
+        <div style="padding:0 20px 16px 44px;font-size:13px;color:var(--g700);line-height:1.6">${d.body}</div>
+      </details>`;
     });
   }
 

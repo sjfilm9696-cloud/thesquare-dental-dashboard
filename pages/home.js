@@ -71,18 +71,19 @@ window.__pageRenderers.home = function(container) {
     <div class="card">
       <h3>월별 성과 한눈에 보기</h3>
       <p class="card-desc">세 줄을 위아래로 비교하면, 매출·조회수·신규 환자가 같은 시기에 함께 움직이는지 확인할 수 있습니다</p>
-      <div class="hm-section">
+      <div class="hm-section heatmap-desktop">
         <div class="hm-label"><span class="dot green"></span> 어떤 달에 매출이 좋았나요?</div>
         <div class="heat-row" id="hm-rev"></div>
       </div>
-      <div class="hm-section">
+      <div class="hm-section heatmap-desktop">
         <div class="hm-label"><span class="dot blue"></span> 어떤 달에 유튜브 성과가 좋았나요?</div>
         <div class="heat-row" id="hm-views"></div>
       </div>
-      <div class="hm-section">
+      <div class="hm-section heatmap-desktop">
         <div class="hm-label"><span class="dot purple"></span> 어떤 달에 신규 환자가 많았나요?</div>
         <div class="heat-row" id="hm-pat"></div>
       </div>
+      <div class="heatmap-mobile" id="hm-mobile"></div>
     </div>
   `;
 
@@ -90,7 +91,47 @@ window.__pageRenderers.home = function(container) {
   _renderHeatmap('hm-rev', revenue, 'money', '#10b981', '#ecfdf5');
   _renderHeatmap('hm-views', views, 'views', '#3b82f6', '#eff6ff');
   _renderHeatmapPat('hm-pat');
+  _renderHeatmapMobile();
 };
+
+function _renderHeatmapMobile() {
+  const el = document.getElementById('hm-mobile');
+  if (!el) return;
+  
+  const qData = {};
+  MN.forEach((n, i) => {
+    const year = n.split('.')[0];
+    const month = parseInt(n.split('.')[1], 10);
+    const q = Math.ceil(month / 3);
+    const key = '20' + year + ' ' + q + '분기';
+    if(!qData[key]) qData[key] = { r:0, v:0, count:0, mStart: month, mEnd: month };
+    qData[key].r += revenue[i];
+    qData[key].v += views[i];
+    qData[key].count++;
+    qData[key].mEnd = month;
+  });
+
+  let html = '';
+  for (const k in qData) {
+    const d = qData[k];
+    const rAvg = Math.round(d.r / d.count);
+    const vAvg = Math.round(d.v / d.count);
+    html += '<div style="background:#fff;border:1px solid var(--g200);border-radius:12px;padding:16px;">' +
+      '<div style="font-weight:700;font-size:14px;color:var(--navy-900);margin-bottom:12px;border-bottom:1px solid var(--g100);padding-bottom:8px">' +
+        '📅 ' + k + ' (' + d.mStart + '~' + d.mEnd + '월)' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px">' +
+        '<span style="color:var(--g500)">평균 매출</span>' +
+        '<span style="font-weight:700;color:var(--revenue)">' + fmtM(rAvg) + '원</span>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;font-size:13px">' +
+        '<span style="color:var(--g500)">평균 조회수</span>' +
+        '<span style="font-weight:700;color:var(--views)">' + fmtV(vAvg) + '회</span>' +
+      '</div>' +
+    '</div>';
+  }
+  el.innerHTML = html;
+}
 
 // 매출/조회수 히트맵 공통 — 상위 2개만 강조, 최저 1개만 약한 빨강
 function _renderHeatmap(id, arr, type, hiColor, hiBg) {
