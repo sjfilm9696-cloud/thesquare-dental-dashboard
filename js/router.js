@@ -4,7 +4,7 @@
 const PAGE_TITLES = {
   home: '전체 요약', revenue: '매출 분석', youtube: '유튜브 성과',
   patient: '신규 환자', content: '콘텐츠 분석', instagram: '인스타그램',
-  strategy: '전략 제안', data: '상세 데이터'
+  strategy: '전략 제안', data: '상세 데이터', manage: '데이터 관리실'
 };
 
 // 페이지 렌더 함수 매핑 — 각 pages/*.js 에서 등록

@@ -155,53 +155,163 @@ function _showMonth(idx) {
     </div>`;
 }
 
-// === v5 인사이트 카드 (수정지시 B 섹션) ===
+// === v6 인사이트 카드 (3단 구조) ===
 function _renderInsights() {
   const el = document.getElementById('yt-insights');
   if (!el) return;
 
   let html = '';
 
+  // 1. 쇼츠가 이 채널의 성장 엔진 (기존 배너를 카드로 또는 배너 유지하되 구조화)
+  // 여기서는 배너가 이미 상단에 있으므로 하단의 상승 구간 3개, 하락 구간 2개를 V6 구조로 변경
+
   // 📈 상승 구간 1: 2025년 4월
   html += `<div class="insight-banner green-grad" style="margin-bottom:16px">
-    <div class="banner-label">📈 조회수 상승 구간</div>
-    <div class="banner-headline">2025년 4월 — 14만회 (쇼츠 시작 효과)</div>
-    <div class="banner-body">이 달에 처음으로 쇼츠를 본격 운영하기 시작했습니다 (쇼츠 12편 + 미드폼 3편 = 총 15편).<br>쇼츠 중 "금이 간 치아"(2만), "초기충치"(1.6만), "빠진 치아"(1.4만)가 높은 반응을 얻었고,<br>미드폼 "치아 덜 깎는 치료"(3.1만)도 기여했습니다.<br>→ <strong>쇼츠 도입이 채널 조회수를 약 2배로 끌어올린 전환점</strong>이었습니다.</div>
+    <div class="banner-label">📈 상승: 2025년 4월 (쇼츠 시작 효과)</div>
+    <div class="banner-headline">조회수가 약 2배로 상승한 전환점</div>
+    <div style="background:rgba(0,0,0,.15);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📊 데이터로 확인된 사실</div>
+      <div class="banner-body" style="font-size:13px;line-height:1.7;margin-bottom:12px">
+        • 3월 조회수: 7.2만회 (미드폼 1편, 쇼츠 0편)<br>
+        • 4월 조회수: 14.0만회 (미드폼 3편, 쇼츠 12편)<br>
+        • 성과 기여: <span style="font-weight:600">"금이 간 치아"(2만), "초기충치"(1.6만) 등 쇼츠가 다수 히트</span>
+      </div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📈 수치 비교</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:0">
+        <tr style="border-bottom:1px solid rgba(255,255,255,.2)">
+          <td style="padding:6px 0;width:30%">25년 3월</td><td style="padding:6px 0">쇼츠 0편</td><td style="text-align:right;padding:6px 0">7.2만회</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0;font-weight:700">25년 4월</td><td style="padding:6px 0;font-weight:700">쇼츠 12편</td><td style="text-align:right;padding:6px 0;font-weight:700">14.0만회</td>
+        </tr>
+      </table>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;opacity:.9">💡 해석</div>
+    <div class="banner-body" style="font-size:13px">쇼츠 도입이 채널 시청층을 대폭 확대시켜 채널 조회수를 약 2배로 끌어올린 전환점이 된 것으로 보입니다. 미드폼 "치아 덜 깎는 치료"(3.1만)의 성공적인 견인 효과도 있었습니다.</div>
   </div>`;
 
   // 📈 상승 구간 2: 2025년 9월
   html += `<div class="insight-banner green-grad" style="margin-bottom:16px">
-    <div class="banner-label">📈 조회수 상승 구간</div>
-    <div class="banner-headline">2025년 9월 — 15.5만회 (역대 최고)</div>
-    <div class="banner-body">미드폼 2편 + 쇼츠 9편으로 꾸준히 업로드했습니다.<br>이 달의 조회수는 신규 업로드 영상보다 <strong>기존 영상들의 알고리즘 추천이 활발했던 시기</strong>로 보입니다.<br>4월 이후 꾸준한 업로드가 쌓이면서 채널 전체의 추천 노출이 최고점에 도달한 것으로 해석됩니다.<br>→ 매출도 같은 시기~1개월 후(10월 1,588만원) 높았습니다.</div>
+    <div class="banner-label">📈 상승: 2025년 9월 (역대 최고 월간)</div>
+    <div class="banner-headline">꾸준한 업로드가 만들어낸 추천 점유율 상승</div>
+    <div style="background:rgba(0,0,0,.15);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📊 데이터로 확인된 사실</div>
+      <div class="banner-body" style="font-size:13px;line-height:1.7;margin-bottom:12px">
+        • 업로드 수량: 미드폼 2편, 쇼츠 9편 (총 11편 꾸준히 유지)<br>
+        • 신규 영상 최고치: "이걸 모르고 신경치료?" (6.3천회) - <strong>특별한 바이럴 폭발 영상 부재</strong><br>
+        • 9월 합산 조회수: 15.5만회 (역대 1위)
+      </div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📈 수치 비교</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:0">
+        <tr style="border-bottom:1px solid rgba(255,255,255,.2)">
+          <td style="padding:6px 0;width:30%">신규 영상 합산</td><td style="padding:6px 0">11편 누적 합산 평균 미만</td><td style="text-align:right;padding:6px 0">약 3만회</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0;font-weight:700">전체 채널 조회수</td><td style="padding:6px 0;font-weight:700">기존 영상의 알고리즘 지속 노출</td><td style="text-align:right;padding:6px 0;font-weight:700">15.5만회</td>
+        </tr>
+      </table>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;opacity:.9">💡 해석</div>
+    <div class="banner-body" style="font-size:13px">단일 신규 영상의 인기가 아니더라도, <strong>꾸준한 업로드가 누적되면서 기존 영상들의 유튜브 알고리즘 추천 점수가 높아진 시기</strong>로 보입니다. 이 시기를 지나며 10월 치과 전체 매출(1,588만원) 최고치도 달성했습니다.</div>
   </div>`;
 
   // 📈 상승 구간 3: 2025년 12월
   html += `<div class="insight-banner green-grad" style="margin-bottom:16px">
-    <div class="banner-label">📈 조회수 상승 구간</div>
-    <div class="banner-headline">2025년 12월 — 13.1만회 (쇼츠 재개 효과)</div>
-    <div class="banner-body">11월에 쇼츠가 0편이었다가, 12월에 쇼츠 10편을 다시 업로드하면서 조회수가 회복되었습니다.<br>"99%는 모르는 치아에서 피가 나는 이유"(9,681), "잇몸약 대신 이걸"(7,514) 등 잇몸 시리즈 쇼츠가 연속 히트.<br>미드폼 "임플란트 후 이것 절대 하지 마세요!"(15,042)도 12월 최고 성과 영상.<br>→ <strong>쇼츠를 재개하면 조회수가 빠르게 회복된다는 것을 확인한 사례</strong>입니다.</div>
+    <div class="banner-label">📈 상승: 2025년 12월 (쇼츠 재개 효과)</div>
+    <div class="banner-headline">쇼츠를 재개하자마자 바로 조회수가 반등했습니다</div>
+    <div style="background:rgba(0,0,0,.15);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📊 데이터로 확인된 사실</div>
+      <div class="banner-body" style="font-size:13px;line-height:1.7;margin-bottom:12px">
+        • 11월: 쇼츠 0편, 합산 7.8만회<br>
+        • 12월: 쇼츠 10편 재개, 합산 13.1만회 (전월 대비 1.6배 회복)<br>
+        • 히트 요인: "99%는 모르는 피나는 이유"(9k), "잇몸약 대신 이걸"(7.5k) 등 <strong>잇몸 시리즈 쇼츠 연속 히트</strong>
+      </div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📈 수치 비교</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:0">
+        <tr style="border-bottom:1px solid rgba(255,255,255,.2)">
+          <td style="padding:6px 0;width:30%">25년 11월</td><td style="padding:6px 0">하락 (쇼츠 중단)</td><td style="text-align:right;padding:6px 0">7.8만회</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0;font-weight:700">25년 12월</td><td style="padding:6px 0;font-weight:700">반등 (잇몸 쇼츠 10편 편재)</td><td style="text-align:right;padding:6px 0;font-weight:700">13.1만회</td>
+        </tr>
+      </table>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;opacity:.9">💡 해석</div>
+    <div class="banner-body" style="font-size:13px">쇼츠 업로드가 줄어들 때 발생했던 알고리즘 노출 감소가, <strong>쇼츠를 재개함으로써 빠르게 회복된다는 명확한 패턴을 확인시켜준 사례</strong>로 보입니다.</div>
   </div>`;
 
   // 📉 하락 구간 1: 2025년 1~3월
   html += `<div class="insight-banner amber-grad" style="margin-bottom:16px">
-    <div class="banner-label">📉 조회수 하락 구간</div>
-    <div class="banner-headline">2025년 1~3월 — 7만대 (쇼츠 전 시기)</div>
-    <div class="banner-body">미드폼만 간헐적으로 업로드(1~3월 합계 겨우 2편)하던 시기입니다.<br>2월은 아예 정식 업로드가 없었고, 기존 영상의 자연 검색 트래픽으로만 조회수가 유지되었습니다.<br>→ 업로드 빈도 부족 + <strong>쇼츠 미운영으로 채널 성장이 정체된 구간.</strong></div>
+    <div class="banner-label">📉 하락: 2025년 1~3월 (쇼츠 운영 전)</div>
+    <div class="banner-headline">신규 업로드 공백이 조회수 정체를 만듭니다</div>
+    <div style="background:rgba(0,0,0,.15);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📊 데이터로 확인된 사실</div>
+      <div class="banner-body" style="font-size:13px;line-height:1.7;margin-bottom:12px">
+        • 25년 1월~3월 업로드: 미드폼 2편, 쇼츠 0편 (2월 정규 업로드 미비)<br>
+        • 해당 3개월 간 월 조회수 평균 7.7만회 (분석기간 내 최저 그룹)
+      </div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📈 수치 비교</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:0">
+        <tr>
+          <td style="padding:6px 0;font-weight:700;width:30%">25년 1~3월</td><td style="padding:6px 0;font-weight:700">총 2편 업로드</td><td style="text-align:right;padding:6px 0;font-weight:700">평균 7.7만회</td>
+        </tr>
+      </table>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;opacity:.9">💡 해석</div>
+    <div class="banner-body" style="font-size:13px">기존 영상의 자연 검색 트래픽으로만 유지된 정체 구간으로 보입니다. <strong>업로드 빈도 부족과 쇼츠 미운영</strong>이 채널 성장을 막는 주된 요인일 가능성이 있습니다.</div>
   </div>`;
 
   // 📉 하락 구간 2: 2025년 10~11월
   html += `<div class="insight-banner amber-grad" style="margin-bottom:16px">
-    <div class="banner-label">📉 조회수 하락 구간</div>
-    <div class="banner-headline">2025년 10~11월 — 12.2만→7.8만 (쇼츠 감소 영향)</div>
-    <div class="banner-body">10월에 쇼츠가 9편→3편으로 줄었고, 11월에는 쇼츠가 0편이었습니다.<br>미드폼만 3편 올렸지만 조회수 반등에는 부족했습니다.<br><strong>데이터가 명확하게 보여주는 패턴: 쇼츠 0편인 달 = 조회수 최저.</strong><br>→ 쇼츠를 쉬면 안 됩니다.</div>
+    <div class="banner-label">📉 하락: 2025년 10~11월 (쇼츠 감소 여파)</div>
+    <div class="banner-headline">쇼츠를 줄이니 채널 전체 조회수가 곧바로 떨어졌습니다</div>
+    <div style="background:rgba(0,0,0,.15);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📊 데이터로 확인된 사실</div>
+      <div class="banner-body" style="font-size:13px;line-height:1.7;margin-bottom:12px">
+        • 9월: 쇼츠 9편 (조회수 15.5만)<br>
+        • 10월: 쇼츠 3편 (조회수 12.2만)<br>
+        • 11월: 쇼츠 0편 (조회수 7.8만)
+      </div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📈 수치 비교</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:0">
+        <tr style="border-bottom:1px solid rgba(255,255,255,.2)">
+          <td style="padding:6px 0;width:30%">25년 9월</td><td style="padding:6px 0">쇼츠 9편</td><td style="text-align:right;padding:6px 0">15.5만회</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.2)">
+          <td style="padding:6px 0">25년 10월</td><td style="padding:6px 0">쇼츠 3편</td><td style="text-align:right;padding:6px 0">12.2만회</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0;font-weight:700">25년 11월</td><td style="padding:6px 0;font-weight:700">쇼츠 0편</td><td style="text-align:right;padding:6px 0;font-weight:700">7.8만회</td>
+        </tr>
+      </table>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;opacity:.9">💡 해석</div>
+    <div class="banner-body" style="font-size:13px">10~11월에 <strong>쇼츠 업로드가 줄어들면서 조회수가 비례하여 하락</strong>했습니다. 미드폼을 꾸준히 올려도 (10월 4편, 11월 3편) 조회수 반등에는 부족했으며, <strong>채널의 트래픽을 위해서는 쇼츠의 지속 발행이 필수적</strong>이라는 점이 확인된 것으로 보입니다.</div>
   </div>`;
 
   // 📉 하락 구간 3: 2026년 2~3월
   html += `<div class="insight-banner amber-grad" style="margin-bottom:16px">
-    <div class="banner-label">📉 조회수 하락 구간</div>
-    <div class="banner-headline">2026년 2~3월 — 8.5만대 정체</div>
-    <div class="banner-body">미드폼 2~3편 + 쇼츠 4편으로 업로드는 했지만, 쇼츠 편수가 줄어들면서(피크 시 9~12편 → 현재 4편) 성장 동력이 약해졌습니다.<br>개인 스토리 주제("서울대생 특징", "유망 직종")의 반응이 치료 정보 주제보다 낮은 것도 영향.<br>→ <strong>쇼츠 편수를 월 8편 이상으로 늘리고, 치료 정보 주제 비중을 높이는 것을 권장드립니다.</strong></div>
+    <div class="banner-label">📉 정체: 2026년 2~3월</div>
+    <div class="banner-headline">개인 스토리 중심의 쇼츠는 반응이 아쉽습니다</div>
+    <div style="background:rgba(0,0,0,.15);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📊 데이터로 확인된 사실</div>
+      <div class="banner-body" style="font-size:13px;line-height:1.7;margin-bottom:12px">
+        • 2~3월 쇼츠 업로드 편수 감소 (월 4편 수준)<br>
+        • "치대 조작 논란", "치과대표원장이 예상한 유망 직종" 등 개인 스토리 화제 중심의 콘텐츠 중심<br>
+        • 월 평균 조회수 정체 (8.5만회, 8.3만회)
+      </div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:6px;opacity:.9">📈 수치 비교</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:0">
+        <tr style="border-bottom:1px solid rgba(255,255,255,.2)">
+          <td style="padding:6px 0;width:30%">치료 주의사항 등 (과거)</td><td style="padding:6px 0">잇몸 피날때, 뼈이식 등</td><td style="text-align:right;padding:6px 0">평균 3~9천회</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0;font-weight:700">스토리 주제 (최근)</td><td style="padding:6px 0;font-weight:700">유망직종, 대학특징 중심</td><td style="text-align:right;padding:6px 0;font-weight:700">평균 1.5천회</td>
+        </tr>
+      </table>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;opacity:.9">💡 해석</div>
+    <div class="banner-body" style="font-size:13px">쇼츠 편수가 줄어든 요인과 함께, <strong>치료 정보성 주제에 비해 가벼운 개인 이야기 중심 주제의 조회수 반응이 다소 낮게</strong> 형성된 것으로 보입니다. 환자들이 궁금해하는 치료 주제 비중을 높일 필요가 있습니다.</div>
   </div>`;
 
   el.innerHTML = html;

@@ -58,6 +58,10 @@
       <span class="nav-icon">📋</span><span>상세 데이터</span>
       <span class="nav-desc">월별 전체 데이터</span>
     </a>
+    <a class="nav-item" data-page="manage">
+      <span class="nav-icon">🔧</span><span>데이터 관리</span>
+      <span class="nav-desc">엑셀/통계 업데이트 시트</span>
+    </a>
   </nav>
   <div class="sidebar-footer">최종 업데이트: 2026.03.30</div>
 </aside>
@@ -86,6 +90,7 @@
 <!-- JS 로드 순서: 데이터 → 차트 유틸 → 각 페이지 → 라우터 -->
 <script src="js/data.js"></script>
 <script src="js/charts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="pages/home.js"></script>
 <script src="pages/revenue.js"></script>
 <script src="pages/youtube.js"></script>
@@ -94,6 +99,7 @@
 <script src="pages/instagram.js"></script>
 <script src="pages/strategy.js"></script>
 <script src="pages/data-table.js"></script>
+<script src="pages/manage.js"></script>
 <script src="js/router.js"></script>
 </body>
 </html>
