@@ -79,6 +79,47 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('sidebarOverlay').classList.remove('show');
   });
 
+  // 기간 필터 버튼
+  document.querySelectorAll('.period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const months = parseInt(btn.dataset.months, 10);
+      _applyPeriodFilter(months);
+    });
+  });
+
   // 초기 홈 페이지 렌더링
   navigateTo('home');
 });
+
+// 기간 필터 적용
+var _originalData = null;
+function _applyPeriodFilter(months) {
+  // 원본 저장 (최초 1회)
+  if (!_originalData) {
+    _originalData = {
+      ML: [...ML], MN: [...MN],
+      revenue: [...revenue], patients: [...patients], views: [...views]
+    };
+  }
+
+  if (months === 0) {
+    // 전체 복원
+    ML.length = 0; ML.push(..._originalData.ML);
+    MN.length = 0; MN.push(..._originalData.MN);
+    revenue.length = 0; revenue.push(..._originalData.revenue);
+    patients.length = 0; patients.push(..._originalData.patients);
+    views.length = 0; views.push(..._originalData.views);
+  } else {
+    const start = Math.max(0, _originalData.ML.length - months);
+    ML.length = 0; ML.push(..._originalData.ML.slice(start));
+    MN.length = 0; MN.push(..._originalData.MN.slice(start));
+    revenue.length = 0; revenue.push(..._originalData.revenue.slice(start));
+    patients.length = 0; patients.push(..._originalData.patients.slice(start));
+    views.length = 0; views.push(..._originalData.views.slice(start));
+  }
+
+  // 현재 페이지 새로고침
+  navigateTo(currentPage);
+}

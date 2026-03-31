@@ -19,6 +19,23 @@ window.__pageRenderers.instagram = function(container) {
       </ul></div>
       <div class="pattern-box neutral"><h4>⚠️ 저조한 패턴</h4><ul><li>원장님 개인 스토리, 동기부여/커리어 콘텐츠 → 대부분 1,000 미만</li></ul></div>
     </div>
+    <!-- 크로스 플랫폼 분석 테이블 (신규) -->
+    <div class="card">
+      <h3>플랫폼별 콘텐츠 성과 비교</h3>
+      <p class="card-desc">같은 주제라도 유튜브와 인스타에서 반응이 다릅니다. 아래 표를 참고하여 플랫폼별 최적 주제를 선택하세요.</p>
+      <table class="data-table" style="margin-bottom:16px">
+        <thead><tr><th>콘텐츠 주제</th><th class="r">유튜브 평균</th><th class="r">인스타 평균</th><th>추천 플랫폼</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600">치료 주의사항</td><td class="r" style="color:var(--views);font-weight:700">1.2만</td><td class="r" style="color:var(--coral);font-weight:700">6,300</td><td><span style="background:#ecfdf5;color:#10b981;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">양쪽 모두</span></td></tr>
+          <tr><td style="font-weight:600">사회 이슈/논란</td><td class="r" style="color:var(--g500)">3,000</td><td class="r" style="color:var(--coral);font-weight:700">3.1만</td><td><span style="background:#fef2f2;color:#ef4444;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">인스타 집중</span></td></tr>
+          <tr><td style="font-weight:600">비용/가격 정보</td><td class="r" style="color:var(--views);font-weight:700">7.4만</td><td class="r" style="color:var(--g500)">3,400</td><td><span style="background:var(--navy-50);color:var(--navy-500);padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">유튜브 집중</span></td></tr>
+          <tr><td style="font-weight:600">구강관리 팁</td><td class="r" style="color:var(--views);font-weight:700">4.3만</td><td class="r" style="color:var(--coral);font-weight:700">4,800</td><td><span style="background:#ecfdf5;color:#10b981;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">양쪽 모두</span></td></tr>
+          <tr><td style="font-weight:600">개인 스토리</td><td class="r" style="color:var(--g500)">1,500</td><td class="r" style="color:var(--g500)">882</td><td><span style="background:var(--g100);color:var(--g500);padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">비추천</span></td></tr>
+        </tbody>
+      </table>
+      <div class="footnote"><strong>활용 방법:</strong> "양쪽 모두"인 주제는 유튜브 원본 → 인스타 30초 편집으로 재활용하세요. "인스타 집중"인 주제는 인스타 전용으로 제작하는 것이 효율적입니다.</div>
+    </div>
+
     <div class="insight-card">
       <div class="insight-label">유튜브 ↔ 인스타 교차 분석</div>
       <ul style="margin:0;padding-left:18px;line-height:2">

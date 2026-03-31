@@ -27,7 +27,9 @@ window.__pageRenderers.revenue = function(container) {
       <div class="kpi-card"><div class="kpi-label">작년 동기 대비</div><div class="kpi-value ${yToYCls}">${yToYText}</div></div>
       <div class="kpi-card"><div class="kpi-label">역대 최고 매출</div><div class="kpi-value" style="color:var(--coral);font-size:22px">${maxText}</div></div>
     </div>
-    <div class="card"><h3>월별 매출 추이</h3><p class="card-desc">막대가 높을수록 매출이 좋은 달입니다</p><div class="chart-box"><canvas id="c-rev"></canvas></div></div>
+    <div class="card"><h3>월별 매출 추이</h3><p class="card-desc">막대가 높을수록 매출이 좋은 달입니다. 빨간 점선은 3개월 이동평균 예측선입니다.</p><div class="chart-box"><canvas id="c-rev"></canvas></div>
+      <div class="predict-note"><span class="predict-dot"></span> 빨간 점선 = 3개월 이동평균 추세선 (다음 달 예측 참고용)</div>
+    </div>
     <div class="card"><h3>매출 × 유튜브 조회수 비교</h3><p class="card-desc">초록 막대(매출)와 파란 선(조회수)이 비슷한 시기에 오르내리는지 확인해보세요 (막대를 클릭하면 목록이 보입니다)</p><div class="chart-box"><canvas id="c-rev-view"></canvas></div>
       <div class="footnote"><strong>읽는 법:</strong> 파란 선(유튜브)이 오른 뒤 1~2개월 후 초록 막대(매출)가 따라 오르는 패턴이 보이면, 유튜브 활동이 매출에 시간차를 두고 영향을 주고 있다는 의미입니다.</div>
       <div id="upload-detail"></div>
@@ -70,10 +72,36 @@ window.__pageRenderers.revenue = function(container) {
 };
 
 function _initRevCharts() {
-  // 매출 추이 — 최고 매출 달만 진한 초록, 나머지 통일
+  // 매출 추이 + 3개월 이동평균 예측선
   const maxRev = Math.max(...revenue);
-  createChart('c-rev', { type:'bar', data:{labels:ML,datasets:[{label:'매출',data:revenue,backgroundColor:revenue.map(v=>v===maxRev?'#10b981':'#34d399'),borderRadius:6}]},
-    options:{...CHART_OPTS,plugins:{...CHART_OPTS.plugins,tooltip:{...CHART_OPTS.plugins.tooltip,callbacks:{label:c=>'  매출: '+fmtM(c.raw)+'원'}}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>fmtM(v)},grid:{color:'#f1f5f9'}}}}});
+  const ma3 = revenue.map((_, i) => {
+    if (i < 2) return null;
+    return Math.round((revenue[i] + revenue[i-1] + revenue[i-2]) / 3);
+  });
+  // 예측: 다음 달
+  const predNext = predict3MA(revenue);
+  const maLabels = [...ML];
+  const maData = [...ma3];
+  if (predNext) {
+    // 다음 달 라벨 추정
+    const lastML = ML[ML.length - 1];
+    const [y, m] = lastML.split('.').map(Number);
+    const nm = m >= 12 ? '0' + (y + 1) + '.01' : y + '.' + String(m + 1).padStart(2, '0');
+    maLabels.push(nm);
+    maData.push(predNext);
+  }
+  const revDataExtended = [...revenue];
+  if (predNext) revDataExtended.push(null);
+
+  createChart('c-rev', { type:'bar', data:{labels:maLabels,datasets:[
+    {label:'매출',data:revDataExtended,backgroundColor:revenue.map(v=>v===maxRev?'#10b981':'#34d399').concat(predNext?['transparent']:[]),borderRadius:6,order:2},
+    {type:'line',label:'추세선 (3개월 평균)',data:maData,borderColor:'#ef4444',borderDash:[6,4],pointRadius:maData.map((_,i)=>i===maData.length-1?6:0),pointBackgroundColor:'#ef4444',pointBorderColor:'#fff',pointBorderWidth:2,tension:.3,borderWidth:2,order:1}
+  ]},
+    options:{...CHART_OPTS,plugins:{...CHART_OPTS.plugins,tooltip:{...CHART_OPTS.plugins.tooltip,callbacks:{label:c=>{
+      if(c.datasetIndex===0 && c.raw) return '  매출: '+fmtM(c.raw)+'원';
+      if(c.datasetIndex===1 && c.raw) return '  추세: '+fmtM(c.raw)+'원';
+      return '';
+    }}}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>fmtM(v)},grid:{color:'#f1f5f9'}}}}});
 
   // 매출 × 조회수 — 조회수 선: 파란색으로 변경 (시인성 개선)
   createChart('c-rev-view', { type:'bar', data:{labels:ML,datasets:[

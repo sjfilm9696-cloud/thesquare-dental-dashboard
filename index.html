@@ -80,7 +80,15 @@
       <h1 class="page-title" id="pageTitle">전체 요약</h1>
       <div class="page-sub">유튜브 채널: 일타치의 임종우 | 분석 기간: 2025.01 – 2026.03</div>
     </div>
-    <div class="update-badge">📅 2026.03.30 업데이트</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="period-filter" id="periodFilter">
+        <button class="period-btn" data-months="3">3개월</button>
+        <button class="period-btn" data-months="6">6개월</button>
+        <button class="period-btn" data-months="12">1년</button>
+        <button class="period-btn active" data-months="0">전체</button>
+      </div>
+      <div class="update-badge">📅 2026.03.30 업데이트</div>
+    </div>
   </div>
   <!-- 페이지 컨테이너 — 각 page JS가 여기에 콘텐츠를 렌더링 -->
   <div class="page-container" id="pageContainer">
@@ -89,18 +97,18 @@
 </main>
 
 <!-- JS 로드 순서: 데이터 → 차트 유틸 → 각 페이지 → 라우터 -->
-<script src="js/data.js?v=6.8"></script>
-<script src="js/charts.js?v=6.8"></script>
+<script src="js/data.js?v=7.0"></script>
+<script src="js/charts.js?v=7.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="pages/home.js?v=6.8"></script>
-<script src="pages/revenue.js?v=6.8"></script>
-<script src="pages/youtube.js?v=6.8"></script>
-<script src="pages/patients.js?v=6.8"></script>
-<script src="pages/content.js?v=6.8"></script>
-<script src="pages/instagram.js?v=6.8"></script>
-<script src="pages/strategy.js?v=6.8"></script>
-<script src="pages/data-table.js?v=6.8"></script>
-<script src="pages/manage.js?v=6.8"></script>
-<script src="js/router.js?v=6.8"></script>
+<script src="pages/home.js?v=7.0"></script>
+<script src="pages/revenue.js?v=7.0"></script>
+<script src="pages/youtube.js?v=7.0"></script>
+<script src="pages/patients.js?v=7.0"></script>
+<script src="pages/content.js?v=7.0"></script>
+<script src="pages/instagram.js?v=7.0"></script>
+<script src="pages/strategy.js?v=7.0"></script>
+<script src="pages/data-table.js?v=7.0"></script>
+<script src="pages/manage.js?v=7.0"></script>
+<script src="js/router.js?v=7.0"></script>
 </body>
 </html>

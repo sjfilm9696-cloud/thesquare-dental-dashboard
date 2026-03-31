@@ -47,6 +47,15 @@ window.__pageRenderers.youtube = function(container) {
       <div id="upload-list" style="margin-top:16px"></div>
     </div>
 
+    <!-- 쇼츠 vs 미드폼 비교 (신규) -->
+    <div class="card">
+      <h3>쇼츠 vs 미드폼 성과 비교</h3>
+      <p class="card-desc">월별 쇼츠/미드폼 업로드 수와 전체 채널 조회수의 관계를 보여줍니다</p>
+      <div id="shorts-summary"></div>
+      <div class="chart-box"><canvas id="c-shorts-compare"></canvas></div>
+      <div class="footnote"><strong>읽는 법:</strong> 파란 막대(쇼츠)가 높은 달에 노란 선(전체 조회수)도 높은 경향이 있다면, 쇼츠가 채널 성장에 핵심 역할을 하고 있다는 의미입니다.</div>
+    </div>
+
     <!-- 상승/하락 구간 인사이트 -->
     <div id="yt-insights"></div>
 
@@ -92,6 +101,9 @@ function _initYtPage() {
   sel.value = 12;
   sel.addEventListener('change', () => _showMonth(+sel.value));
   _showMonth(12);
+
+  // === 쇼츠 vs 미드폼 비교 ===
+  _renderShortsComparison();
 
   // === 인사이트 카드 ===
   _renderInsights();
@@ -171,6 +183,57 @@ function _showMonth(idx) {
         </div>
       </div>
     </div>`;
+}
+
+// === 쇼츠 vs 미드폼 비교 차트 ===
+function _renderShortsComparison() {
+  const stats = getShortsVsMidformStats();
+
+  // 요약 카드
+  const shortsMonths = stats.filter(s => s.shorts > 0);
+  const noShortsMonths = stats.filter(s => s.shorts === 0);
+  const avgWithShorts = shortsMonths.length ? Math.round(shortsMonths.reduce((a, s) => a + s.views, 0) / shortsMonths.length) : 0;
+  const avgWithout = noShortsMonths.length ? Math.round(noShortsMonths.reduce((a, s) => a + s.views, 0) / noShortsMonths.length) : 0;
+  const ratio = avgWithout > 0 ? (avgWithShorts / avgWithout).toFixed(1) : '-';
+
+  const summaryEl = document.getElementById('shorts-summary');
+  if (summaryEl) {
+    summaryEl.innerHTML = `
+      <div class="comparison-grid" style="margin-bottom:20px">
+        <div class="comp-card" style="border-top:3px solid var(--patient)">
+          <h4>쇼츠 있는 달 평균</h4>
+          <div class="comp-big" style="color:var(--patient)">${fmtV(avgWithShorts)}회</div>
+          <div class="comp-sub">${shortsMonths.length}개월 평균</div>
+        </div>
+        <div class="comp-card" style="border-top:3px solid var(--g300)">
+          <h4>쇼츠 없는 달 평균</h4>
+          <div class="comp-big" style="color:var(--g500)">${fmtV(avgWithout)}회</div>
+          <div class="comp-sub">${noShortsMonths.length}개월 평균 (약 ${ratio}분의1)</div>
+        </div>
+      </div>`;
+  }
+
+  // 차트: 쇼츠/미드폼 편수 막대 + 조회수 선
+  createChart('c-shorts-compare', {
+    type: 'bar',
+    data: {
+      labels: stats.map(s => s.month),
+      datasets: [
+        { label: '쇼츠 편수', data: stats.map(s => s.shorts), backgroundColor: '#3b82f6', borderRadius: 4, yAxisID: 'y', order: 2 },
+        { label: '미드폼 편수', data: stats.map(s => s.midform), backgroundColor: '#93c5fd', borderRadius: 4, yAxisID: 'y', order: 3 },
+        { type: 'line', label: '월간 조회수', data: stats.map(s => s.views), borderColor: '#f59e0b', pointBackgroundColor: '#f59e0b', pointRadius: 5, tension: .3, borderWidth: 3, yAxisID: 'y1', order: 1 }
+      ]
+    },
+    options: {
+      ...CHART_OPTS,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: { grid: { display: false }, stacked: true },
+        y: { stacked: true, position: 'left', title: { display: true, text: '영상 편수', color: '#3b82f6', font: { size: 11, weight: '700' } }, ticks: { color: '#3b82f6', callback: v => v + '편' }, grid: { color: '#f1f5f9' } },
+        y1: { position: 'right', title: { display: true, text: '조회수', color: '#f59e0b', font: { size: 11, weight: '700' } }, ticks: { color: '#f59e0b', callback: v => fmtV(v) }, grid: { drawOnChartArea: false } }
+      }
+    }
+  });
 }
 
 // === v6 인사이트 카드 (3단 구조) ===

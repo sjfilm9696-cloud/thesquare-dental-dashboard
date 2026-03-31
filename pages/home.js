@@ -1,55 +1,121 @@
-// ===== 홈 페이지 (전체 요약) =====
+// ===== 홈 페이지 (전체 요약) — v7: ROI + 자동인사이트 + 예측 + 알림뱃지 =====
 window.__pageRenderers.home = function(container) {
-  // 최신 데이터 기준 인덱스 
   const lastIdx = ML.length - 1;
   const curMNText = MN[lastIdx].substring(0,4) + '년 ' + MN[lastIdx].substring(5) + '월';
-  
+
   // 전년 동기 (12개월 전) 비교 계산
   let revCmpText = '데이터 부족', patCmpText = '데이터 부족', viewCmpText = '데이터 부족';
   let revCls = '', patCls = '', viewCls = '';
-  
+
   if (lastIdx >= 12) {
     const prevIdx = lastIdx - 12;
     const revRatio = (revenue[lastIdx] / revenue[prevIdx]).toFixed(1);
     const patDiff = patients[lastIdx] - patients[prevIdx];
     const viewRatio = (views[lastIdx] / views[prevIdx]).toFixed(1);
-    
+
     if (revRatio >= 1) { revCmpText = `▲ 작년 동월보다 약 ${revRatio}배`; revCls = 'up'; }
     else { revCmpText = `▼ 작년 동월보다 낮음`; revCls = 'down'; }
-    
+
     if (patDiff > 0) { patCmpText = `▲ 작년 동월보다 ${patDiff}명 더 많음`; patCls = 'up'; }
     else if (patDiff === 0) { patCmpText = `- 작년 동월과 동일`; patCls = ''; }
     else { patCmpText = `▼ 작년 동월보다 ${Math.abs(patDiff)}명 적음`; patCls = 'down'; }
-    
+
     if (viewRatio >= 1) { viewCmpText = `▲ 작년 동월보다 약 ${viewRatio}배`; viewCls = 'up'; }
     else { viewCmpText = `▼ 작년 동월보다 낮음`; viewCls = 'down'; }
   } else if (lastIdx > 0) {
-    // 1년 전 데이터가 없으면 전월비교
     const prevIdx = lastIdx - 1;
     revCmpText = revenue[lastIdx] > revenue[prevIdx] ? '▲ 전월 대비 상승' : '▼ 전월 대비 하락';
     patCmpText = patients[lastIdx] > patients[prevIdx] ? '▲ 전월 대비 상승' : '▼ 전월 대비 하락';
     viewCmpText = views[lastIdx] > views[prevIdx] ? '▲ 전월 대비 상승' : '▼ 전월 대비 하락';
   }
 
+  // ROI 계산
+  const avgRevPerPat = avgRevenuePerPatient(3);
+  const totalRev = yearlyTotal();
+  const totalPat = patients.reduce((a, b) => a + b, 0);
+
+  // 최근 월 업로드 정보
+  const lastUpload = uploadSummary[uploadSummary.length - 1];
+  const viewsPerVideo = lastUpload && lastUpload.total > 0 ? Math.round(views[lastIdx] / lastUpload.total) : 0;
+
+  // 예측값
+  const predRev = predict3MA(revenue);
+  const predView = predict3MA(views);
+  const predPat = predict3MA(patients);
+
+  // 자동 인사이트
+  const insight = generateAutoInsight();
+
+  // 변동 알림
+  const alerts = getAlertBadges();
+
   container.innerHTML = `
-    <!-- KPI 카드 3장 -->
+    <!-- KPI 카드 3장 + 알림뱃지 -->
     <div class="kpi-grid">
       <div class="kpi-card clickable" onclick="navigateTo('revenue')">
+        ${alerts.rev ? `<div class="alert-badge alert-${alerts.rev}">${alerts.rev === 'up' ? '↑' : '↓'}</div>` : ''}
         <div class="kpi-label">${curMNText} 매출</div>
         <div class="kpi-value" style="color:var(--revenue)">${fmtM(revenue[lastIdx])}원</div>
         <div class="kpi-change ${revCls}">${revCmpText}</div>
       </div>
       <div class="kpi-card clickable" onclick="navigateTo('patient')">
+        ${alerts.pat ? `<div class="alert-badge alert-${alerts.pat}">${alerts.pat === 'up' ? '↑' : '↓'}</div>` : ''}
         <div class="kpi-label">${curMNText} 신규 환자</div>
         <div class="kpi-value" style="color:var(--patient)">${patients[lastIdx]}명</div>
         <div class="kpi-change ${patCls}">${patCmpText}</div>
       </div>
       <div class="kpi-card clickable" onclick="navigateTo('youtube')">
+        ${alerts.view ? `<div class="alert-badge alert-${alerts.view}">${alerts.view === 'up' ? '↑' : '↓'}</div>` : ''}
         <div class="kpi-label">${curMNText} 유튜브 조회수</div>
         <div class="kpi-value" style="color:var(--views)">${fmtV(views[lastIdx])}회</div>
         <div class="kpi-change ${viewCls}">${viewCmpText}</div>
       </div>
     </div>
+
+    <!-- ROI 카드 4장 (신규) -->
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-label">환자당 평균 매출</div>
+        <div class="roi-value">${fmtM(avgRevPerPat)}원</div>
+        <div class="roi-sub">최근 3개월 기준</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-label">영상당 평균 조회수</div>
+        <div class="roi-value">${fmtV(viewsPerVideo)}회</div>
+        <div class="roi-sub">${curMNText} 기준</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-label">누적 총 매출</div>
+        <div class="roi-value">${(totalRev / 100000000).toFixed(1)}억원</div>
+        <div class="roi-sub">${MN[0]} ~ ${MN[lastIdx]}</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-label">총 신규 환자</div>
+        <div class="roi-value">${totalPat}명</div>
+        <div class="roi-sub">월 평균 ${Math.round(totalPat / ML.length)}명</div>
+      </div>
+    </div>
+
+    <!-- 다음 달 예측 -->
+    ${predRev ? `
+    <div class="card" style="margin-bottom:20px">
+      <h3>📈 다음 달 예측 (3개월 이동평균)</h3>
+      <p class="card-desc">최근 3개월 평균치를 기반으로 한 다음 달 추정값입니다. 참고 수치이며 실제와 다를 수 있습니다.</p>
+      <div class="kpi-grid" style="margin-bottom:0">
+        <div class="kpi-card" style="border:2px dashed var(--g300)">
+          <div class="kpi-label">예측 매출</div>
+          <div class="kpi-value" style="color:var(--g500);font-size:26px">${fmtM(predRev)}원</div>
+        </div>
+        <div class="kpi-card" style="border:2px dashed var(--g300)">
+          <div class="kpi-label">예측 신규 환자</div>
+          <div class="kpi-value" style="color:var(--g500);font-size:26px">${predPat}명</div>
+        </div>
+        <div class="kpi-card" style="border:2px dashed var(--g300)">
+          <div class="kpi-label">예측 조회수</div>
+          <div class="kpi-value" style="color:var(--g500);font-size:26px">${fmtV(predView)}회</div>
+        </div>
+      </div>
+    </div>` : ''}
 
     <!-- 데이터 산출 기준 -->
     <div class="data-basis">
@@ -57,14 +123,11 @@ window.__pageRenderers.home = function(container) {
       매출·신규 환자: 병원 경영 데이터 기준 | 유튜브 조회수: 해당 월 일별 조회수 합산 | 기간: ${MN[0]} ~ ${MN[lastIdx]}
     </div>
 
-    <!-- 핵심 인사이트 배너 -->
-    <div class="insight-banner blue-grad">
+    <!-- 핵심 인사이트 배너 (자동 생성) -->
+    <div class="insight-banner ${insight.type}">
       <div class="banner-label">KEY INSIGHT</div>
-      <div class="banner-headline">매출은 역대 최고치를 기록했습니다</div>
-      <div class="banner-body">
-        2026년 1월 매출 2,957만원은 2025년 전체에서 가장 높았던 10월(1,588만원)의 약 2배 수준입니다.<br>
-        신규 환자 수는 8명으로 다소 줄었지만, 매출이 크게 오른 것은 <strong>기존에 내원하셨던 환자분들의 추가 치료 결정</strong>이 늘어난 것으로 보입니다.
-      </div>
+      <div class="banner-headline">${insight.headline}</div>
+      <div class="banner-body">${insight.body}</div>
     </div>
 
     <!-- 히트맵 -->
@@ -97,7 +160,7 @@ window.__pageRenderers.home = function(container) {
 function _renderHeatmapMobile() {
   const el = document.getElementById('hm-mobile');
   if (!el) return;
-  
+
   const qData = {};
   MN.forEach((n, i) => {
     const year = n.split('.')[0];
@@ -118,7 +181,7 @@ function _renderHeatmapMobile() {
     const vAvg = Math.round(d.v / d.count);
     html += '<div style="background:#fff;border:1px solid var(--g200);border-radius:12px;padding:16px;">' +
       '<div style="font-weight:700;font-size:14px;color:var(--navy-900);margin-bottom:12px;border-bottom:1px solid var(--g100);padding-bottom:8px">' +
-        '📅 ' + k + ' (' + d.mStart + '~' + d.mEnd + '월)' +
+        k + ' (' + d.mStart + '~' + d.mEnd + '월)' +
       '</div>' +
       '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px">' +
         '<span style="color:var(--g500)">평균 매출</span>' +
@@ -133,13 +196,12 @@ function _renderHeatmapMobile() {
   el.innerHTML = html;
 }
 
-// 매출/조회수 히트맵 공통 — 상위 2개만 강조, 최저 1개만 약한 빨강
+// 매출/조회수 히트맵 공통
 function _renderHeatmap(id, arr, type, hiColor, hiBg) {
   const el = document.getElementById(id);
   if (!el) return;
-  // 상위 2개, 하위 1개만 강조 (나머지는 흰 배경)
   const sorted = [...arr].sort((a,b) => b-a);
-  const top2Threshold = sorted[1]; // 2번째로 높은 값
+  const top2Threshold = sorted[1];
   const minVal = Math.min(...arr);
   MN.forEach((n, i) => {
     const isTop = arr[i] >= top2Threshold;
@@ -156,7 +218,7 @@ function _renderHeatmap(id, arr, type, hiColor, hiBg) {
   });
 }
 
-// 신규 환자 히트맵 — 상위 2개만 보라 강조
+// 신규 환자 히트맵
 function _renderHeatmapPat(id) {
   const el = document.getElementById(id);
   if (!el) return;

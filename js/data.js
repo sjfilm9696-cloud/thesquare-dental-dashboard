@@ -334,9 +334,114 @@ var uploadSummary = [
   {month:'26.01',midform:4,shorts:8,total:12,views:113581},
 ];
 
+// ===== ROI & 분석 유틸리티 =====
+
+// 환자당 평균 매출 (최근 N개월)
+function avgRevenuePerPatient(n) {
+  const len = Math.min(n, ML.length);
+  let totalRev = 0, totalPat = 0;
+  for (let i = ML.length - len; i < ML.length; i++) {
+    totalRev += revenue[i];
+    totalPat += patients[i];
+  }
+  return totalPat > 0 ? Math.round(totalRev / totalPat) : 0;
+}
+
+// 연 누적 매출
+function yearlyTotal() {
+  return revenue.reduce((a, b) => a + b, 0);
+}
+
+// 3개월 이동평균 예측
+function predict3MA(arr) {
+  if (arr.length < 3) return null;
+  const last3 = arr.slice(-3);
+  return Math.round(last3.reduce((a, b) => a + b, 0) / 3);
+}
+
+// 쇼츠/미드폼 통계
+function getShortsVsMidformStats() {
+  return uploadSummary.map(u => ({
+    month: u.month,
+    midform: u.midform,
+    shorts: u.shorts,
+    views: u.views,
+    avgPerMidform: u.midform > 0 ? Math.round(u.views / u.midform) : 0,
+    avgPerShorts: u.shorts > 0 ? Math.round(u.views / u.shorts) : 0,
+    shortsRatio: u.total > 0 ? Math.round(u.shorts / u.total * 100) : 0
+  }));
+}
+
+// 자동 인사이트 생성
+function generateAutoInsight() {
+  const last = ML.length - 1;
+  const curRev = revenue[last];
+  const maxRev = Math.max(...revenue);
+  const maxRevIdx = revenue.indexOf(maxRev);
+  const prevRev = last > 0 ? revenue[last - 1] : curRev;
+  const curPat = patients[last];
+  const prevPat = last > 0 ? patients[last - 1] : curPat;
+  const curView = views[last];
+  const prevView = last > 0 ? views[last - 1] : curView;
+
+  let headline = '', body = '', type = 'blue-grad';
+
+  // 역대 최고 매출
+  if (curRev === maxRev) {
+    const secondMax = Math.max(...revenue.filter((_, i) => i !== last));
+    const ratio = (curRev / secondMax).toFixed(1);
+    headline = '매출이 역대 최고치를 기록했습니다';
+    body = `${MN[last]} 매출 ${fmtM(curRev)}원은 이전 최고치(${fmtM(secondMax)}원)의 약 ${ratio}배 수준입니다.`;
+    if (curPat < prevPat) {
+      body += `<br>신규 환자 수는 ${curPat}명으로 다소 줄었지만, 매출이 크게 오른 것은 <strong>기존 환자분들의 추가 치료 결정</strong>이 늘어난 것으로 보입니다.`;
+    }
+    type = 'blue-grad';
+  }
+  // 매출 하락
+  else if (curRev < prevRev * 0.7) {
+    headline = '매출이 전월 대비 크게 감소했습니다';
+    body = `${MN[last]} 매출 ${fmtM(curRev)}원으로 전월(${fmtM(prevRev)}원) 대비 ${fmtM(prevRev - curRev)}원 감소했습니다.<br>`;
+    if (curView < prevView) body += '유튜브 조회수도 함께 하락하여, <strong>콘텐츠 노출 감소가 매출에 영향</strong>을 준 것으로 보입니다.';
+    else body += '유튜브 조회수는 유지/상승 중이므로, <strong>외부 요인이나 계절적 영향</strong>일 가능성이 있습니다.';
+    type = 'amber-grad';
+  }
+  // 매출 상승
+  else if (curRev > prevRev * 1.3) {
+    headline = '매출이 전월 대비 큰 폭으로 상승했습니다';
+    const diff = Math.round((curRev - prevRev) / 10000);
+    body = `${MN[last]} 매출 ${fmtM(curRev)}원으로 전월 대비 약 ${diff}만원 상승했습니다.`;
+    if (curPat > prevPat) body += `<br>신규 환자도 ${curPat - prevPat}명 증가하며 <strong>유튜브 콘텐츠가 신환 유입에 기여</strong>하고 있는 것으로 보입니다.`;
+    type = 'green-grad';
+  }
+  // 안정적
+  else {
+    headline = '매출이 안정적으로 유지되고 있습니다';
+    body = `${MN[last]} 매출 ${fmtM(curRev)}원으로 전월과 유사한 수준입니다. 지속적인 콘텐츠 운영이 안정적인 매출 기반을 만들고 있습니다.`;
+    type = 'blue-grad';
+  }
+
+  return { headline, body, type };
+}
+
+// 변동 알림 감지 (±30%)
+function getAlertBadges() {
+  const last = ML.length - 1;
+  if (last < 1) return { rev: null, pat: null, view: null };
+  const badges = {};
+  const check = (curr, prev) => {
+    if (!prev) return null;
+    const ratio = curr / prev;
+    if (ratio >= 1.3) return 'up';
+    if (ratio <= 0.7) return 'down';
+    return null;
+  };
+  badges.rev = check(revenue[last], revenue[last - 1]);
+  badges.pat = check(patients[last], patients[last - 1]);
+  badges.view = check(views[last], views[last - 1]);
+  return badges;
+}
+
 // 페이지 렌더러 등록 객체 (각 page JS에서 사용)
 window.__pageRenderers = {};
-
-
 
 // 파일 끝
