@@ -93,7 +93,10 @@ var tlData = [
 
 // ===== 유틸리티 함수 =====
 function fmtM(n){return Math.round(n/10000).toLocaleString()+'만';}
-function fmtV(n){return (n/10000).toFixed(1)+'만';}
+function fmtV(n) {
+  if (n >= 10000) return (n / 10000).toFixed(1) + '만';
+  return n.toLocaleString();
+}
 
 // 쉬운 비교 문구 (퍼센트 사용 금지)
 function easyCompare(curr,prev,type){
