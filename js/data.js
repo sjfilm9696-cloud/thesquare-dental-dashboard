@@ -110,129 +110,219 @@ function easyCompare(curr,prev,type){
   }
 }
 
-// 월별 업로드 영상 목록 (v4 — 표 데이터.csv 기준 전체 실제 데이터)
-// type: 'shorts'(60초 이하) | 'midform'(60초 초과)
+// 월별 업로드 영상 목록 (v5 최종 — 유튜브 스튜디오 기준 정확한 데이터)
+// 미드폼/쇼츠 완전 분리 구조
 const monthlyUploads = {
-  '2025.01': [
-    {title:'[한국경제TV] 서울대 출신 치과의사가 알려주는 임플란트의 모든것',views:553,type:'midform',date:'01/03'},
-  ],
-  '2025.02': [],
-  '2025.03': [
-    {title:'충치치료 왜 병원마다 가격이 다를까?!',views:1133,type:'midform',date:'03/27'},
-  ],
-  '2025.04': [
-    {title:'치아 최대한 덜 깎는 치료, 이렇게 요청하세요',views:30987,type:'midform',date:'04/24'},
-    {title:'금이 간 치아, 획기적 치료법',views:19843,type:'shorts',date:'04/27'},
-    {title:'초기충치, 치료하면 망하는 이유',views:16366,type:'shorts',date:'04/05'},
-    {title:'빠진 치아, 100% 임플란트?',views:13970,type:'shorts',date:'04/07'},
-    {title:'충치 상태별 치료비, 내 충치 치료비는 얼마?',views:10542,type:'shorts',date:'04/06'},
-    {title:'맨 안쪽 어금니 임플란트 꼭 해야 하나요?',views:7140,type:'midform',date:'04/04'},
-    {title:'빠진 치아, 놔두면 생기는 일',views:6108,type:'shorts',date:'04/07'},
-    {title:'크라운하기 전 꼭 확인하세요.',views:2921,type:'shorts',date:'04/26'},
-    {title:'초기충치, 치료하는 의사VS그냥두는 의사',views:2581,type:'shorts',date:'04/04'},
-    {title:'양치질 할 때 피나는 이유',views:2568,type:'shorts',date:'04/22'},
-    {title:'치아 삭제, 피해야만 합니다.',views:2567,type:'shorts',date:'04/25'},
-    {title:'치아문제 방치했더니, 틀어진 턱?',views:2249,type:'shorts',date:'04/08'},
-    {title:'잇몸출혈 막는 획기적인 도구',views:1251,type:'shorts',date:'04/24'},
-    {title:'치과의사가 말하는 치간칫솔 고르는 법',views:1221,type:'shorts',date:'04/23'},
-    {title:'잇몸에서 피 나는 이유, 3,000원짜리 해결법',views:1041,type:'midform',date:'04/17'},
-  ],
-  '2025.05': [
-    {title:'스케일링 후 잇몸이 넓어졌다?',views:6599,type:'shorts',date:'05/22'},
-    {title:'스케일링 후 치아시리다?',views:3644,type:'shorts',date:'05/21'},
-    {title:'30년만에 스케일링 받는 PD님..',views:2761,type:'midform',date:'05/15'},
-    {title:'좋은 치과, 고르는 법1',views:2449,type:'shorts',date:'05/27'},
-    {title:'좋은 치과, 고르는 법2',views:1639,type:'shorts',date:'05/28'},
-    {title:'아무도 안말해주는 내 치아 살리는 모든 방법',views:1248,type:'midform',date:'05/30'},
-    {title:'치과의사가 추천하는 좋은치과 선택기준 5가지',views:1014,type:'midform',date:'05/23'},
-    {title:'좋은 치과, 고르는 법3',views:1000,type:'shorts',date:'05/29'},
-    {title:'잦은 스케일링, 문제가 될수도 있을까?',views:990,type:'shorts',date:'05/20'},
-    {title:'서울대 치과의사인데 왜 투잡을?',views:559,type:'midform',date:'05/04'},
-  ],
-  '2025.06': [
-    {title:'백태 생기는 원인 및 해결법 총정리!',views:16530,type:'midform',date:'06/27'},
-    {title:'되도록 발치하지 마세요. 흔들리는 치아',views:9748,type:'midform',date:'06/06'},
-    {title:'내 치아 살리는 잇몸치료!',views:8703,type:'shorts',date:'06/03'},
-    {title:'내 치아 vs 임플란트',views:7244,type:'shorts',date:'06/02'},
-    {title:'내 치아가 흔들리는 이유?',views:5853,type:'shorts',date:'06/10'},
-    {title:'치과 안갈 수 있는 최고의 양치법?!',views:5609,type:'shorts',date:'06/25'},
-    {title:'아직도 칫솔질만 열심히 하세요?',views:4663,type:'shorts',date:'06/26'},
-    {title:'불편한 틀니 아직도 쓰세요?',views:4626,type:'shorts',date:'06/19'},
-    {title:'당장 치과가야하는 치아 흔들림은?',views:4532,type:'shorts',date:'06/12'},
-    {title:'내 치아 살리는, 획기적 치료법?',views:3943,type:'shorts',date:'06/04'},
-    {title:'이 열심히 닦는데 충치가 생겨요',views:3670,type:'shorts',date:'06/24'},
-    {title:'임플란트는 이 치료 하세요!',views:3135,type:'shorts',date:'06/18'},
-    {title:'치아가 여러개 빠졌다면 어떤치료?',views:2123,type:'shorts',date:'06/17'},
-    {title:'치아가 갑자기 흔들리는 이유!',views:1159,type:'shorts',date:'06/11'},
-    {title:'이 치료, 100% 틀니보다 편합니다.',views:1118,type:'midform',date:'06/13'},
-    {title:'1년에 3번 가야 할 치과 2번에 1번만 갈 수 있습니다',views:402,type:'midform',date:'06/20'},
-  ],
-  '2025.07': [
-    {title:'치과의사가 쓰는 혀클리너 추천!',views:36631,type:'shorts',date:'07/02'},
-    {title:'기계없이 집에서 치석 관리하는 법',views:18558,type:'shorts',date:'07/22'},
-    {title:'셀프 스케일링이 효과 없는 진짜 이유',views:7819,type:'shorts',date:'07/21'},
-    {title:'임플란트 뼈이식, 진짜 뼈를 만들어줄까?',views:4805,type:'shorts',date:'07/16'},
-    {title:'치과의사마다 진단이 다른이유?!',views:3961,type:'shorts',date:'07/17'},
-    {title:'임플란트 뼈이식, 제대로 알고 받으세요!',views:3142,type:'shorts',date:'07/15'},
-    {title:'위험하고 효과없고, 돈낭비입니다',views:1975,type:'shorts',date:'07/23'},
-    {title:'혀에 냄새나는 백태 생기는 원인',views:1773,type:'shorts',date:'07/01'},
-    {title:'백태가 유독 잘끼는 사람 특징',views:1513,type:'shorts',date:'07/03'},
-    {title:'셀프 스케일링, 결국 다시 병원 오는 이유',views:404,type:'midform',date:'07/18'},
-    {title:'임플란트 뼈이식 권하는데 어떡하죠?',views:375,type:'midform',date:'07/11'},
-  ],
-  '2025.08': [
-    {title:'하루 5분 투자로 치과 평생 안가는 법',views:3015,type:'midform',date:'08/20'},
-    {title:'교정 이걸로 하세요. 투명교정 VS 철사교정',views:2945,type:'midform',date:'08/29'},
-    {title:'치아를 망가트리는 최대 원인',views:2442,type:'midform',date:'08/19'},
-    {title:'투명교정 할 때, 국산 vs 외국산',views:2239,type:'shorts',date:'08/28'},
-    {title:'증상 없는 치아 패임, 더 위험한 이유',views:1926,type:'midform',date:'08/05'},
-    {title:'양치 세게 안하는데 이가 파이는 진짜 이유',views:1910,type:'shorts',date:'08/04'},
-    {title:'교정 고민이라면 이걸 꼭 체크해야합니다',views:1878,type:'shorts',date:'08/30'},
-    {title:'이 잘 닦는데도 임플란트 하게 되는 경우',views:1814,type:'shorts',date:'08/18'},
-  ],
-  '2025.09': [
-    {title:'이걸 모르고 신경치료? 치아 수명 반토막납니다',views:6377,type:'midform',date:'09/18'},
-    {title:'무조건 신경치료 받아야하는 특징 4가지',views:5457,type:'shorts',date:'09/17'},
-    {title:'기상 후 입에서 똥냄새 나는 이유',views:3622,type:'shorts',date:'09/24'},
-    {title:'다이소 치약-2080 과연 괜찮을까?',views:2953,type:'midform',date:'09/08'},
-    {title:'올리브영 유명 치약 진짜 괜찮을까?',views:2669,type:'shorts',date:'09/09'},
-    {title:'신경치료 대신 이걸 하세요',views:2292,type:'shorts',date:'09/19'},
-    {title:'입마름, 방치하면 벌어지는 일?',views:2277,type:'shorts',date:'09/23'},
-  ],
-  '2025.10': [
-    {title:'이 것 때문에 값비싼 임플란트 수술 실패',views:3667,type:'shorts',date:'10/14'},
-    {title:'이 걸 모르면 임플란트 100% 실패',views:3549,type:'midform',date:'10/14'},
-    {title:'임플란트도 뽑기운이 있다?',views:1985,type:'midform',date:'10/15'},
-    {title:'충치치료 후 통증과 치아시림 위험신호',views:754,type:'midform',date:'10/17'},
-  ],
-  '2025.11': [
-    {title:'치아가 다시 자라는 신약 개발!',views:4530,type:'midform',date:'11/21'},
-    {title:'잠잘 때 이갈이 해결하는 모든 방법',views:1074,type:'midform',date:'11/07'},
-    {title:'꼴보기 싫은 치아 틈 사이 치료',views:567,type:'midform',date:'11/14'},
-  ],
-  '2025.12': [
-    {title:'임플란트 후 이것 절대 하지 마세요!',views:15042,type:'midform',date:'12/12'},
-    {title:'99%는 모르는 치아에서 피가 나는 이유',views:9681,type:'shorts',date:'12/08'},
-    {title:'치과의사는 잇몸약 대신 이걸 먹습니다',views:7514,type:'shorts',date:'12/24'},
-    {title:'단돈 2천원으로 잇몸 되살린 실제 방법',views:4685,type:'shorts',date:'12/17'},
-    {title:'잇몸 박살나기 전 나타나는 신호 3가지',views:4276,type:'shorts',date:'12/14'},
-    {title:'치과의사가 대화 중에 깜짝 놀란 이유',views:4244,type:'shorts',date:'12/03'},
-    {title:'치과의사가 실제 복용하는 잇몸 영양제 TOP3',views:4141,type:'shorts',date:'12/22'},
-    {title:'양치 잘하는데 잇몸이 녹아내리는 이유',views:3817,type:'shorts',date:'12/30'},
-    {title:'잇몸 피날 때 꼭 먹어야 하는 음식3가지',views:2365,type:'shorts',date:'12/29'},
-    {title:'잇몸색 이렇다면 이미 염증 퍼진 겁니다',views:1867,type:'shorts',date:'12/10'},
-  ],
-  '2026.01': [
-    {title:'결국 임플란트 재수술 받는 PD..',views:6960,type:'shorts',date:'01/08'},
-    {title:'치과의사가 본 치대 엑스레이 조작 논란',views:4890,type:'shorts',date:'01/28'},
-    {title:'잇몸 피날 때 하면 안되는 최악의 행동',views:4259,type:'shorts',date:'01/12'},
-    {title:'양치 절대 이렇게 하지마세요',views:3590,type:'shorts',date:'01/21'},
-    {title:'이거 안하면 무조건 치과오게 됩니다...',views:3584,type:'shorts',date:'01/05'},
-    {title:'뭘 먹어도 치아에 끼는 사람들 특징',views:1838,type:'shorts',date:'01/26'},
-    {title:'턱 아플 때 0원으로 치료 하는법',views:1788,type:'shorts',date:'01/14'},
-    {title:'뼈이식 필요없는 최신 임플란트의 정체!',views:1374,type:'midform',date:'01/03'},
-  ],
+  '2025.01': {
+    midform: [{title:'[한국경제TV] 서울대 출신 치과의사가 알려주는 임플란트의 모든것',views:553,date:'01/03'}],
+    shorts: [],
+    summary: '미드폼 1편 / 쇼츠 0편'
+  },
+  '2025.02': {midform:[],shorts:[],summary:'정식 업로드 없음 (광고용 소재 클립만 10편 업로드)'},
+  '2025.03': {
+    midform: [{title:'충치치료 왜 병원마다 가격이 다를까?!',views:1133,date:'03/27'}],
+    shorts: [],
+    summary: '미드폼 1편 / 쇼츠 0편'
+  },
+  '2025.04': {
+    midform: [
+      {title:'치아 최대한 덜 깎는 치료, 이렇게 요청하세요',views:30987,date:'04/24'},
+      {title:'맨 안쪽 어금니 임플란트 꼭 해야 하나요?',views:7140,date:'04/04'},
+      {title:'잇몸에서 피 나는 이유, 3,000원짜리 해결법',views:1041,date:'04/17'},
+    ],
+    shorts: [
+      {title:'금이 간 치아, 획기적 치료법',views:19843,date:'04/27'},
+      {title:'초기충치, 치료하면 망하는 이유',views:16366,date:'04/05'},
+      {title:'빠진 치아, 100% 임플란트?',views:13970,date:'04/07'},
+      {title:'충치 상태별 치료비, 내 충치 치료비는 얼마?',views:10542,date:'04/06'},
+      {title:'빠진 치아, 놔두면 생기는 일',views:6108,date:'04/07'},
+      {title:'크라운하기 전 꼭 확인하세요',views:2921,date:'04/26'},
+      {title:'초기충치, 치료하는 의사VS그냥두는 의사',views:2581,date:'04/04'},
+      {title:'양치질 할 때 피나는 이유',views:2568,date:'04/22'},
+      {title:'치아 삭제, 피해야만 합니다',views:2567,date:'04/25'},
+      {title:'치아문제 방치했더니, 틀어진 턱?',views:2249,date:'04/08'},
+      {title:'잇몸출혈 막는 획기적인 도구',views:1251,date:'04/24'},
+      {title:'치과의사가 말하는 치간칫솔 고르는 법',views:1221,date:'04/23'},
+    ],
+    summary: '미드폼 3편 / 쇼츠 12편 — 쇼츠 첫 본격 운영 시작'
+  },
+  '2025.05': {
+    midform: [
+      {title:'30년만에 스케일링 받는 PD님..',views:2761,date:'05/15'},
+      {title:'아무도 안말해주는 내 치아 살리는 모든 방법',views:1248,date:'05/30'},
+      {title:'치과의사가 추천하는 좋은치과 선택기준 5가지',views:1014,date:'05/23'},
+      {title:'서울대 치과의사인데 왜 투잡을?',views:559,date:'05/04'},
+    ],
+    shorts: [
+      {title:'스케일링 후 잇몸이 넓어졌다?',views:6599,date:'05/22'},
+      {title:'스케일링 후 치아시리다?',views:3644,date:'05/21'},
+      {title:'좋은 치과, 고르는 법1',views:2449,date:'05/27'},
+      {title:'좋은 치과, 고르는 법2',views:1639,date:'05/28'},
+      {title:'좋은 치과, 고르는 법3',views:1000,date:'05/29'},
+      {title:'잦은 스케일링, 문제가 될수도 있을까?',views:990,date:'05/20'},
+    ],
+    summary: '미드폼 4편 / 쇼츠 6편'
+  },
+  '2025.06': {
+    midform: [
+      {title:'백태 생기는 원인 및 해결법 총정리!',views:16530,date:'06/27'},
+      {title:'되도록 발치하지 마세요. 흔들리는 치아',views:9748,date:'06/06'},
+      {title:'이 치료, 100% 틀니보다 편합니다',views:1118,date:'06/13'},
+      {title:'1년에 3번 가야 할 치과 2번에 1번만 갈 수 있습니다',views:402,date:'06/20'},
+    ],
+    shorts: [
+      {title:'내 치아 살리는 잇몸치료!',views:8703,date:'06/03'},
+      {title:'내 치아 vs 임플란트',views:7244,date:'06/02'},
+      {title:'내 치아가 흔들리는 이유?',views:5853,date:'06/10'},
+      {title:'치과 안갈 수 있는 최고의 양치법?!',views:5609,date:'06/25'},
+      {title:'아직도 칫솔질만 열심히 하세요?',views:4663,date:'06/26'},
+      {title:'불편한 틀니 아직도 쓰세요?',views:4626,date:'06/19'},
+      {title:'당장 치과가야하는 치아 흔들림은?',views:4532,date:'06/12'},
+      {title:'내 치아 살리는, 획기적 치료법?',views:3943,date:'06/04'},
+      {title:'이 열심히 닦는데 충치가 생겨요',views:3670,date:'06/24'},
+      {title:'임플란트는 이 치료 하세요!',views:3135,date:'06/18'},
+      {title:'치아가 여러개 빠졌다면 어떤치료?',views:2123,date:'06/17'},
+      {title:'치아가 갑자기 흔들리는 이유!',views:1159,date:'06/11'},
+    ],
+    summary: '미드폼 4편 / 쇼츠 12편'
+  },
+  '2025.07': {
+    midform: [
+      {title:'셀프 스케일링, 결국 다시 병원 오는 이유',views:404,date:'07/18'},
+      {title:'임플란트 뼈이식 권하는데 어떡하죠?',views:375,date:'07/11'},
+    ],
+    shorts: [
+      {title:'치과의사가 쓰는 혀클리너 추천!',views:36631,date:'07/02'},
+      {title:'기계없이 집에서 치석 관리하는 법',views:18558,date:'07/22'},
+      {title:'셀프 스케일링이 효과 없는 진짜 이유',views:7819,date:'07/21'},
+      {title:'임플란트 뼈이식, 진짜 뼈를 만들어줄까?',views:4805,date:'07/16'},
+      {title:'치과의사마다 진단이 다른이유?!',views:3961,date:'07/17'},
+      {title:'임플란트 뼈이식, 제대로 알고 받으세요!',views:3142,date:'07/15'},
+      {title:'위험하고 효과없고, 돈낭비입니다',views:1975,date:'07/23'},
+      {title:'혀에 냄새나는 백태 생기는 원인',views:1773,date:'07/01'},
+      {title:'백태가 유독 잘끼는 사람 특징',views:1513,date:'07/03'},
+    ],
+    summary: '미드폼 2편 / 쇼츠 9편 — 쇼츠 "혀클리너"가 3.7만으로 대히트'
+  },
+  '2025.08': {
+    midform: [
+      {title:'치과의사가 몰래 구매하는 다이소, 올리브영 치약!',views:913,date:'08/29'},
+      {title:'투명교정 vs 철사교정, 안 맞는 걸 고르면 500만원 버립니다',views:957,date:'08/22'},
+      {title:'치아 갈라져서 임플란트하게 되는 사람들 특징',views:334,date:'08/15'},
+      {title:'치아시림, 이게 문제입니다. 방치하지 마세요!',views:538,date:'08/01'},
+    ],
+    shorts: [
+      {title:'하루 5분 투자로 치과 평생 안가는 법',views:3015,date:'08/20'},
+      {title:'교정 이걸로 하세요. 투명교정 VS 철사교정',views:2945,date:'08/29'},
+      {title:'치아를 망가트리는 최대 원인',views:2442,date:'08/19'},
+      {title:'투명교정 할 때, 국산 vs 외국산',views:2239,date:'08/28'},
+      {title:'증상 없는 치아 패임, 더 위험한 이유',views:1926,date:'08/05'},
+      {title:'양치 세게 안하는데 이가 파이는 진짜 이유',views:1910,date:'08/04'},
+      {title:'교정 고민이라면 이걸 꼭 체크해야합니다',views:1878,date:'08/30'},
+      {title:'이 잘 닦는데도 임플란트 하게 되는 경우',views:1814,date:'08/18'},
+      {title:'때웠는데 또 떨어져요, 치료가 자꾸 실패하는 이유',views:1639,date:'08/06'},
+    ],
+    summary: '미드폼 4편 / 쇼츠 9편'
+  },
+  '2025.09': {
+    midform: [
+      {title:'입마름 방치하면 전신질환 생깁니다',views:257,date:'09/19'},
+      {title:'신경치료가 무조건 답이 아닙니다',views:706,date:'09/13'},
+    ],
+    shorts: [
+      {title:'이걸 모르고 신경치료? 치아 수명 반토막납니다',views:6377,date:'09/18'},
+      {title:'무조건 신경치료 받아야하는 특징 4가지',views:5457,date:'09/17'},
+      {title:'기상 후 입에서 똥냄새 나는 이유',views:3622,date:'09/24'},
+      {title:'다이소 치약-2080 과연 괜찮을까?',views:2953,date:'09/08'},
+      {title:'올리브영 유명 치약 진짜 괜찮을까?',views:2669,date:'09/09'},
+      {title:'전신질환 유발하는 입마름 막는 법',views:2003,date:'09/25'},
+      {title:'신경치료 대신 이걸 하세요',views:2292,date:'09/19'},
+      {title:'올리브영 미백치약 진짜 효과있을까?',views:1791,date:'09/10'},
+      {title:'입마름, 방치하면 벌어지는 일?',views:2277,date:'09/23'},
+    ],
+    summary: '미드폼 2편 / 쇼츠 9편 — 월간 조회수 15.5만 역대 최고'
+  },
+  '2025.10': {
+    midform: [
+      {title:'정말 집에서 하는 치아미백, 하얗게 될까요?',views:345,date:'10/31'},
+      {title:'소금물 가글은 효과적일까?',views:474,date:'10/24'},
+      {title:'충치치료 후 통증과 치아시림 위험신호',views:754,date:'10/17'},
+      {title:'임플란트 실패 원인 4가지',views:333,date:'10/05'},
+    ],
+    shorts: [
+      {title:'이 것 때문에 값비싼 임플란트 수술 실패',views:3667,date:'10/14'},
+      {title:'이 걸 모르면 임플란트 100% 실패',views:3549,date:'10/15'},
+      {title:'임플란트도 뽑기운이 있다?',views:1985,date:'10/16'},
+    ],
+    summary: '미드폼 4편 / 쇼츠 3편 — 쇼츠가 줄기 시작'
+  },
+  '2025.11': {
+    midform: [
+      {title:'치아가 다시 자라는 신약 개발!',views:4530,date:'11/21'},
+      {title:'잠잘 때 이갈이 해결하는 모든 방법',views:1074,date:'11/07'},
+      {title:'꼴보기 싫은 치아 틈 사이 치료',views:567,date:'11/14'},
+    ],
+    shorts: [],
+    summary: '미드폼 3편 / 쇼츠 0편 — 쇼츠 완전 중단, 조회수 최저 7.8만'
+  },
+  '2025.12': {
+    midform: [
+      {title:'임플란트 후 이것 절대 하지 마세요!',views:15042,date:'12/12'},
+      {title:'잇몸이 붓고 피나는 의외의 문제와 해결법',views:499,date:'12/05'},
+      {title:'무삭제 라미네이트? 말로만 믿지 마세요',views:176,date:'12/26'},
+    ],
+    shorts: [
+      {title:'99%는 모르는 치아에서 피가 나는 이유',views:9681,date:'12/08'},
+      {title:'치과의사는 잇몸약 대신 이걸 먹습니다',views:7514,date:'12/24'},
+      {title:'단돈 2천원으로 잇몸 되살린 실제 방법',views:4685,date:'12/17'},
+      {title:'잇몸 박살나기 전 나타나는 신호 3가지',views:4276,date:'12/15'},
+      {title:'치과의사가 대화 중에 깜짝 놀란 이유',views:4244,date:'12/03'},
+      {title:'치과의사가 실제 복용하는 잇몸 영양제 TOP3',views:4141,date:'12/22'},
+      {title:'양치 잘하는데 잇몸이 녹아내리는 이유',views:3817,date:'12/30'},
+      {title:'잇몸 피날 때 꼭 먹어야 하는 음식3가지',views:2365,date:'12/29'},
+      {title:'잇몸색 이렇다면 이미 염증 퍼진 겁니다',views:1867,date:'12/10'},
+      {title:'매일 이렇게 씹으면 턱관절 박살납니다',views:430,date:'12/18'},
+    ],
+    summary: '미드폼 3편 / 쇼츠 10편 — 쇼츠 재개, 조회수 13.1만으로 회복'
+  },
+  '2026.01': {
+    midform: [
+      {title:'뼈이식 필요없는 최신 임플란트의 정체!',views:1374,date:'01/03'},
+      {title:'라미네이트 재시술 막는 법/스마일 리허설',views:246,date:'01/09'},
+      {title:'앞니 치료하는 모든 것',views:356,date:'01/17'},
+      {title:'잇몸 살리기 위한 잇몸치료는?',views:1494,date:'01/30'},
+    ],
+    shorts: [
+      {title:'결국 임플란트 재수술 받는 PD..',views:6960,date:'01/08'},
+      {title:'치과의사가 본 치대 엑스레이 조작 논란',views:4890,date:'01/28'},
+      {title:'잇몸 피날 때 하면 안되는 최악의 행동',views:4259,date:'01/12'},
+      {title:'양치 절대 이렇게 하지마세요',views:3590,date:'01/21'},
+      {title:'이거 안하면 무조건 치과오게 됩니다...',views:3584,date:'01/05'},
+      {title:'뭘 먹어도 치아에 끼는 사람들 특징',views:1838,date:'01/26'},
+      {title:'턱 아플 때 0원으로 치료 하는법',views:1788,date:'01/14'},
+      {title:'99%가 모르는 임플란트 피의 진짜 의미',views:1731,date:'01/19'},
+    ],
+    summary: '미드폼 4편 / 쇼츠 8편'
+  },
 };
+
+// 월별 업로드 요약 테이블 (검증 완료)
+const uploadSummary = [
+  {month:'25.01',midform:1,shorts:0,total:1,views:69517},
+  {month:'25.02',midform:0,shorts:0,total:0,views:90544},
+  {month:'25.03',midform:1,shorts:0,total:1,views:72898},
+  {month:'25.04',midform:3,shorts:12,total:15,views:140268},
+  {month:'25.05',midform:4,shorts:6,total:10,views:84631},
+  {month:'25.06',midform:4,shorts:12,total:16,views:122738},
+  {month:'25.07',midform:2,shorts:9,total:11,views:113868},
+  {month:'25.08',midform:4,shorts:9,total:13,views:127709},
+  {month:'25.09',midform:2,shorts:9,total:11,views:155199},
+  {month:'25.10',midform:4,shorts:3,total:7,views:122380},
+  {month:'25.11',midform:3,shorts:0,total:3,views:78073},
+  {month:'25.12',midform:3,shorts:10,total:13,views:131168},
+  {month:'26.01',midform:4,shorts:8,total:12,views:113581},
+];
 
 // 페이지 렌더러 등록 객체 (각 page JS에서 사용)
 window.__pageRenderers = {};
+
