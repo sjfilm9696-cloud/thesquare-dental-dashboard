@@ -110,5 +110,67 @@ function easyCompare(curr,prev,type){
   }
 }
 
+// 월별 업로드 영상 목록 (표 데이터.csv 기반)
+// type: 'shorts'(60초 이하) | 'midform'(60초 초과)
+const monthlyUploads = {
+  '2025.01': [],
+  '2025.02': [],
+  '2025.03': [
+    {title:'구강유산균 이렇게 선택하세요!',views:94390,type:'shorts',date:'03.27'},
+    {title:'구강유산균 효과 있다? 없다?',views:10910,type:'shorts',date:'03.26'},
+    {title:'턱에서 소리나면 지금 당장 이운동 해보세요',views:33340,type:'midform',date:'03.08'},
+  ],
+  '2025.04': [
+    {title:'임플란트 가장 합리적인 가격대는?',views:79087,type:'midform',date:'04.05'},
+    {title:'충치 상태별 치료비, 내 충치 치료비는 얼마?',views:10542,type:'shorts',date:'04.06'},
+    {title:'빠진 치아, 100% 임플란트?',views:13970,type:'shorts',date:'04.07'},
+    {title:'초기충치, 치료하면 망하는 이유',views:16366,type:'shorts',date:'04.05'},
+    {title:'맨 안쪽 어금니 임플란트 꼭 해야 하나요?',views:7140,type:'midform',date:'04.04'},
+    {title:'이런분들 꼭 임플란트 하고 부작용 생깁니다',views:20380,type:'midform',date:'04.12'},
+    {title:'치아 최대한 덜 깎는 치료, 이렇게 요청하세요',views:30987,type:'midform',date:'04.24'},
+    {title:'임플란트 가격, 얼마 정도면 적당할까?',views:68017,type:'shorts',date:'04.26'},
+    {title:'잇몸에 이게 보인다면 당장 치과 가세요',views:27249,type:'midform',date:'04.26'},
+    {title:'금이 간 치아, 획기적 치료법',views:19843,type:'shorts',date:'04.27'},
+    {title:'이 증상 있으면 임플란트 부작용 입니다',views:28860,type:'shorts',date:'04.30'},
+    {title:'빠진 치아, 놔두면 생기는 일',views:6108,type:'shorts',date:'04.07'},
+  ],
+  '2025.05': [
+    {title:'스케일링 후 잇몸이 넓어졌다?',views:6599,type:'shorts',date:'05.22'},
+  ],
+  '2025.06': [
+    {title:'되도록 발치하지 마세요. 흔들리는 치아',views:9748,type:'midform',date:'06.06'},
+    {title:'내 치아 vs 임플란트',views:7244,type:'shorts',date:'06.02'},
+    {title:'내 치아 살리는 잇몸치료!',views:8703,type:'shorts',date:'06.03'},
+    {title:'내 치아가 흔들리는 이유?',views:5853,type:'shorts',date:'06.10'},
+    {title:'백태 생기는 원인 및 해결법 총정리!',views:16530,type:'midform',date:'06.27'},
+    {title:'치과 안갈 수 있는 최고의 양치법?!',views:5609,type:'shorts',date:'06.25'},
+  ],
+  '2025.07': [
+    {title:'치과의사가 쓰는 혀클리너 추천!',views:36631,type:'shorts',date:'07.02'},
+    {title:'셀프 스케일링이 효과 없는 진짜 이유',views:7819,type:'shorts',date:'07.21'},
+    {title:'기계없이 집에서 치석 관리하는 법',views:18558,type:'shorts',date:'07.22'},
+  ],
+  '2025.08': [],
+  '2025.09': [
+    {title:'백태를 제거하는 2가지 방법?',views:82416,type:'shorts',date:'(기존, 09월 급상승)'},
+    {title:'이걸 모르고 신경치료? 치아 수명 반토막납니다',views:6377,type:'shorts',date:'09.18'},
+    {title:'무조건 신경치료 받아야하는 특징 4가지',views:5457,type:'shorts',date:'09.17'},
+  ],
+  '2025.10': [
+    {title:'잇몸 염증 싹- 잡는 마사지 방법?',views:9502,type:'shorts',date:'10.21'},
+    {title:'치석관리 제대로 안했을때 생기는 일',views:5809,type:'shorts',date:'10.16'},
+  ],
+  '2025.11': [],
+  '2025.12': [
+    {title:'임플란트 후 이것 절대 하지 마세요!',views:15042,type:'midform',date:'12.12'},
+    {title:'99%는 모르는 치아에서 피가 나는 이유',views:9681,type:'shorts',date:'12.08'},
+    {title:'치과의사는 잇몸약 대신 이걸 먹습니다',views:7514,type:'shorts',date:'12.24'},
+    {title:'숨어있는 매복 사랑니, 안 뽑으면 어떻게 될까?',views:6404,type:'shorts',date:'12.04'},
+  ],
+  '2026.01': [
+    {title:'결국 임플란트 재수술 받는 PD..',views:6960,type:'shorts',date:'01.08'},
+  ],
+};
+
 // 페이지 렌더러 등록 객체 (각 page JS에서 사용)
 window.__pageRenderers = {};
