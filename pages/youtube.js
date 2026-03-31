@@ -1,11 +1,23 @@
 // ===== 유튜브 성과 페이지 (v5 최종) =====
 window.__pageRenderers.youtube = function(container) {
+  const lastIdx = ML.length - 1;
+  const curV = views[lastIdx];
+  const prevV = lastIdx > 0 ? views[lastIdx - 1] : curV;
+  const maxV = Math.max(...views);
+  const maxVIdx = views.indexOf(maxV);
+  const maxVText = MN[maxVIdx].substring(0,4) + '년 ' + MN[maxVIdx].substring(5) + '월';
+  
+  const mToMoDiff = curV - prevV;
+  const mToMo = mToMoDiff > 0 ? '▲' : (mToMoDiff < 0 ? '▼' : '-');
+  const mToMoText = mToMoDiff === 0 ? '동일' : `${fmtV(Math.abs(mToMoDiff))} ${mToMoDiff>0?'많음':'적음'} ${mToMo}`;
+  let mToMoCls = mToMoDiff > 0 ? 'up' : (mToMoDiff < 0 ? 'down' : '');
+
   container.innerHTML = `
     <div class="kpi-grid four">
-      <div class="kpi-card"><div class="kpi-label">이번달 조회수</div><div class="kpi-value" style="color:var(--views)">11.4만회</div></div>
-      <div class="kpi-card"><div class="kpi-label">전월 대비</div><div class="kpi-value down">1.8만 적음 ▼</div></div>
-      <div class="kpi-card"><div class="kpi-label">역대 최고 월간</div><div class="kpi-value">15.5만회</div><div class="kpi-change" style="color:var(--g500)">2025년 9월</div></div>
-      <div class="kpi-card"><div class="kpi-label">분석 기간</div><div class="kpi-value" style="font-size:22px">15개월</div></div>
+      <div class="kpi-card"><div class="kpi-label">이번달 조회수</div><div class="kpi-value" style="color:var(--views)">${fmtV(curV)}회</div></div>
+      <div class="kpi-card"><div class="kpi-label">전월 대비</div><div class="kpi-value ${mToMoCls}">${mToMoText}</div></div>
+      <div class="kpi-card"><div class="kpi-label">역대 최고 월간</div><div class="kpi-value">${fmtV(maxV)}회</div><div class="kpi-change" style="color:var(--g500)">${maxVText}</div></div>
+      <div class="kpi-card"><div class="kpi-label">데이터 누적</div><div class="kpi-value" style="font-size:22px">${ML.length}개월</div></div>
     </div>
 
     <!-- 핵심 발견 배너 -->

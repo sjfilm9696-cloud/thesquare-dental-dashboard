@@ -1,11 +1,28 @@
 // ===== 신규 환자 페이지 =====
 window.__pageRenderers.patient = function(container) {
+  const lastIdx = ML.length - 1;
+  const curM = patients[lastIdx];
+  const prevM = lastIdx > 0 ? patients[lastIdx - 1] : curM;
+  const lastYM = lastIdx >= 12 ? patients[lastIdx - 12] : null;
+
+  const mToMoDiff = curM - prevM;
+  const mToMoText = mToMoDiff === 0 ? '동일' : `${mToMoDiff>0?'+':''}${mToMoDiff}명 ${mToMoDiff>0?'▲':'▼'}`;
+  let mToMoCls = mToMoDiff > 0 ? 'up' : (mToMoDiff < 0 ? 'down' : '');
+  
+  let yToYText = '데이터 부족';
+  let yToYCls = '';
+  if (lastYM !== null) {
+    const yDiff = curM - lastYM;
+    yToYText = yDiff === 0 ? '동일' : `${Math.abs(yDiff)}명 ${yDiff>0?'많음 ▲':'적음 ▼'}`;
+    yToYCls = yDiff > 0 ? 'up' : (yDiff < 0 ? 'down' : '');
+  }
+
   container.innerHTML = `
     <div class="kpi-grid four">
-      <div class="kpi-card"><div class="kpi-label">이번달 신규 환자</div><div class="kpi-value" style="color:var(--patient)">8명</div></div>
-      <div class="kpi-card"><div class="kpi-label">전월 대비</div><div class="kpi-value up">+3명 ▲</div></div>
-      <div class="kpi-card"><div class="kpi-label">작년 동기 대비</div><div class="kpi-value down">4명 적음 ▼</div></div>
-      <div class="kpi-card"><div class="kpi-label">연간 누적</div><div class="kpi-value">8명</div><div class="kpi-change" style="color:var(--g500)">2026년 1월</div></div>
+      <div class="kpi-card"><div class="kpi-label">이번달 신규 환자</div><div class="kpi-value" style="color:var(--patient)">${curM}명</div></div>
+      <div class="kpi-card"><div class="kpi-label">전월 대비</div><div class="kpi-value ${mToMoCls}">${mToMoText}</div></div>
+      <div class="kpi-card"><div class="kpi-label">작년 동기 대비</div><div class="kpi-value ${yToYCls}">${yToYText}</div></div>
+      <div class="kpi-card"><div class="kpi-label">연간 누적 평균</div><div class="kpi-value">${Math.round(patients.reduce((a,b)=>a+b,0)/patients.length)}명</div><div class="kpi-change" style="color:var(--g500)">월 평균</div></div>
     </div>
     <div class="card"><h3>월별 신규 환자 추이</h3><p class="card-desc">매달 몇 명의 신규 환자가 내원하셨는지를 보여줍니다</p><div class="chart-box"><canvas id="c-pat"></canvas></div></div>
     <div class="card"><h3>신규 환자 × 유튜브 조회수 비교</h3><p class="card-desc">유튜브 조회수가 오른 달에 신규 환자도 같이 늘었는지 확인해보세요</p><div class="chart-box"><canvas id="c-pat-view"></canvas></div>

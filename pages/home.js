@@ -1,29 +1,60 @@
 // ===== 홈 페이지 (전체 요약) =====
 window.__pageRenderers.home = function(container) {
+  // 최신 데이터 기준 인덱스 
+  const lastIdx = ML.length - 1;
+  const curMNText = MN[lastIdx].substring(0,4) + '년 ' + MN[lastIdx].substring(5) + '월';
+  
+  // 전년 동기 (12개월 전) 비교 계산
+  let revCmpText = '데이터 부족', patCmpText = '데이터 부족', viewCmpText = '데이터 부족';
+  let revCls = '', patCls = '', viewCls = '';
+  
+  if (lastIdx >= 12) {
+    const prevIdx = lastIdx - 12;
+    const revRatio = (revenue[lastIdx] / revenue[prevIdx]).toFixed(1);
+    const patDiff = patients[lastIdx] - patients[prevIdx];
+    const viewRatio = (views[lastIdx] / views[prevIdx]).toFixed(1);
+    
+    if (revRatio >= 1) { revCmpText = `▲ 작년 동월보다 약 ${revRatio}배`; revCls = 'up'; }
+    else { revCmpText = `▼ 작년 동월보다 낮음`; revCls = 'down'; }
+    
+    if (patDiff > 0) { patCmpText = `▲ 작년 동월보다 ${patDiff}명 더 많음`; patCls = 'up'; }
+    else if (patDiff === 0) { patCmpText = `- 작년 동월과 동일`; patCls = ''; }
+    else { patCmpText = `▼ 작년 동월보다 ${Math.abs(patDiff)}명 적음`; patCls = 'down'; }
+    
+    if (viewRatio >= 1) { viewCmpText = `▲ 작년 동월보다 약 ${viewRatio}배`; viewCls = 'up'; }
+    else { viewCmpText = `▼ 작년 동월보다 낮음`; viewCls = 'down'; }
+  } else if (lastIdx > 0) {
+    // 1년 전 데이터가 없으면 전월비교
+    const prevIdx = lastIdx - 1;
+    revCmpText = revenue[lastIdx] > revenue[prevIdx] ? '▲ 전월 대비 상승' : '▼ 전월 대비 하락';
+    patCmpText = patients[lastIdx] > patients[prevIdx] ? '▲ 전월 대비 상승' : '▼ 전월 대비 하락';
+    viewCmpText = views[lastIdx] > views[prevIdx] ? '▲ 전월 대비 상승' : '▼ 전월 대비 하락';
+  }
+
   container.innerHTML = `
     <!-- KPI 카드 3장 -->
     <div class="kpi-grid">
       <div class="kpi-card clickable" onclick="navigateTo('revenue')">
-        <div class="kpi-label">2026년 1월 매출</div>
-        <div class="kpi-value" style="color:var(--revenue)">2,957만원</div>
-        <div class="kpi-change up">▲ 작년 1월보다 약 2.5배</div>
+        <div class="kpi-label">${curMNText} 매출</div>
+        <div class="kpi-value" style="color:var(--revenue)">${fmtM(revenue[lastIdx])}원</div>
+        <div class="kpi-change ${revCls}">${revCmpText}</div>
       </div>
       <div class="kpi-card clickable" onclick="navigateTo('patient')">
-        <div class="kpi-label">2026년 1월 신규 환자</div>
-        <div class="kpi-value" style="color:var(--patient)">8명</div>
-        <div class="kpi-change down">▼ 작년 1월보다 4명 적음</div>
+        <div class="kpi-label">${curMNText} 신규 환자</div>
+        <div class="kpi-value" style="color:var(--patient)">${patients[lastIdx]}명</div>
+        <div class="kpi-change ${patCls}">${patCmpText}</div>
       </div>
       <div class="kpi-card clickable" onclick="navigateTo('youtube')">
-        <div class="kpi-label">2026년 1월 유튜브 조회수</div>
-        <div class="kpi-value" style="color:var(--views)">11.4만회</div>
-        <div class="kpi-change up">▲ 작년 1월보다 약 1.6배</div>
+        <div class="kpi-label">${curMNText} 유튜브 조회수</div>
+        <div class="kpi-value" style="color:var(--views)">${fmtV(views[lastIdx])}회</div>
+        <div class="kpi-change ${viewCls}">${viewCmpText}</div>
       </div>
     </div>
 
     <!-- 데이터 산출 기준 -->
     <div class="data-basis">
       <strong>데이터 산출 기준</strong><br>
-      매출·신규 환자: 병원 경영 데이터 기준 | 유튜브 조회수: 해당 월 일별 조회수 합산 | 비교: 작년 같은 달 기준
+      매출·신규 환자: 병원 경영 데이터 기준 | 유튜브 조회수: 해당 월 일별 조회수 합산 | 기간: ${MN[0]} ~ ${MN[lastIdx]}
     </div>
 
     <!-- 핵심 인사이트 배너 -->

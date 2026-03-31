@@ -1,11 +1,31 @@
 // ===== 매출 분석 페이지 =====
 window.__pageRenderers.revenue = function(container) {
+  const lastIdx = ML.length - 1;
+  const curM = revenue[lastIdx];
+  const prevM = lastIdx > 0 ? revenue[lastIdx - 1] : curM;
+  const lastYM = lastIdx >= 12 ? revenue[lastIdx - 12] : null;
+  const maxM = Math.max(...revenue);
+  
+  const mToMo = curM > prevM ? '▲' : (curM < prevM ? '▼' : '-');
+  const mToMoText = curM === prevM ? '동일' : `약 ${(curM/prevM).toFixed(1)}배 ${mToMo}`;
+  let mToMoCls = curM > prevM ? 'up' : 'down';
+  
+  let yToYText = '데이터 부족';
+  let yToYCls = '';
+  if (lastYM) {
+    const yToY = curM > lastYM ? '▲' : (curM < lastYM ? '▼' : '-');
+    yToYText = curM === lastYM ? '동일' : `약 ${(curM/lastYM).toFixed(1)}배 ${yToY}`;
+    yToYCls = curM > lastYM ? 'up' : 'down';
+  }
+  
+  const maxText = curM === maxM ? '기록 갱신 🏆' : '변동 기록 중';
+
   container.innerHTML = `
     <div class="kpi-grid four">
-      <div class="kpi-card"><div class="kpi-label">이번달 매출</div><div class="kpi-value" style="color:var(--revenue)">2,957만원</div></div>
-      <div class="kpi-card"><div class="kpi-label">전월 대비</div><div class="kpi-value up">약 6.4배 ▲</div></div>
-      <div class="kpi-card"><div class="kpi-label">작년 동기 대비</div><div class="kpi-value up">약 2.5배 ▲</div></div>
-      <div class="kpi-card"><div class="kpi-label">역대 최고 매출</div><div class="kpi-value" style="color:var(--coral)">기록 갱신</div></div>
+      <div class="kpi-card"><div class="kpi-label">이번달 매출</div><div class="kpi-value" style="color:var(--revenue)">${fmtM(curM)}원</div></div>
+      <div class="kpi-card"><div class="kpi-label">전월 대비</div><div class="kpi-value ${mToMoCls}">${mToMoText}</div></div>
+      <div class="kpi-card"><div class="kpi-label">작년 동기 대비</div><div class="kpi-value ${yToYCls}">${yToYText}</div></div>
+      <div class="kpi-card"><div class="kpi-label">역대 최고 매출</div><div class="kpi-value" style="color:var(--coral);font-size:22px">${maxText}</div></div>
     </div>
     <div class="card"><h3>월별 매출 추이</h3><p class="card-desc">막대가 높을수록 매출이 좋은 달입니다</p><div class="chart-box"><canvas id="c-rev"></canvas></div></div>
     <div class="card"><h3>매출 × 유튜브 조회수 비교</h3><p class="card-desc">초록 막대(매출)와 파란 선(조회수)이 비슷한 시기에 오르내리는지 확인해보세요</p><div class="chart-box"><canvas id="c-rev-view"></canvas></div>
