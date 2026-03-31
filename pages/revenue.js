@@ -28,8 +28,9 @@ window.__pageRenderers.revenue = function(container) {
       <div class="kpi-card"><div class="kpi-label">역대 최고 매출</div><div class="kpi-value" style="color:var(--coral);font-size:22px">${maxText}</div></div>
     </div>
     <div class="card"><h3>월별 매출 추이</h3><p class="card-desc">막대가 높을수록 매출이 좋은 달입니다</p><div class="chart-box"><canvas id="c-rev"></canvas></div></div>
-    <div class="card"><h3>매출 × 유튜브 조회수 비교</h3><p class="card-desc">초록 막대(매출)와 파란 선(조회수)이 비슷한 시기에 오르내리는지 확인해보세요</p><div class="chart-box"><canvas id="c-rev-view"></canvas></div>
+    <div class="card"><h3>매출 × 유튜브 조회수 비교</h3><p class="card-desc">초록 막대(매출)와 파란 선(조회수)이 비슷한 시기에 오르내리는지 확인해보세요 (막대를 클릭하면 목록이 보입니다)</p><div class="chart-box"><canvas id="c-rev-view"></canvas></div>
       <div class="footnote"><strong>읽는 법:</strong> 파란 선(유튜브)이 오른 뒤 1~2개월 후 초록 막대(매출)가 따라 오르는 패턴이 보이면, 유튜브 활동이 매출에 시간차를 두고 영향을 주고 있다는 의미입니다.</div>
+      <div id="upload-detail"></div>
     </div>
     <div class="card"><h3>매출 × 신규 환자 비교</h3><p class="card-desc">매출이 오른 달에 신규 환자도 같이 올랐나요?</p><div class="chart-box"><canvas id="c-rev-pat"></canvas></div>
       <div class="footnote">매출은 올랐는데 신규 환자는 변동이 없다면, 기존 환자분들의 추가 치료가 매출을 이끌었을 가능성이 있습니다.</div>
@@ -78,7 +79,15 @@ function _initRevCharts() {
   createChart('c-rev-view', { type:'bar', data:{labels:ML,datasets:[
     {type:'bar',label:'매출',data:revenue,backgroundColor:'#34d399',borderRadius:6,yAxisID:'y',order:2},
     {type:'line',label:'유튜브 조회수',data:views,borderColor:'#3b82f6',pointBackgroundColor:'#3b82f6',pointRadius:5,tension:.3,borderWidth:3,yAxisID:'y1',order:1}
-  ]}, options:{...CHART_OPTS,interaction:{mode:'index',intersect:false},scales:dualScales('매출','#10b981',v=>fmtM(v),'조회수','#3b82f6',v=>fmtV(v))}});
+  ]}, options:{...CHART_OPTS,interaction:{mode:'index',intersect:false},
+    onClick: (evt, elements) => {
+      if (elements.length > 0) {
+        const idx = elements[0].index;
+        const month = MN[idx]; // '2025.04'
+        showMonthUploads(month, idx);
+      }
+    },
+    scales:dualScales('매출','#10b981',v=>fmtM(v),'조회수','#3b82f6',v=>fmtV(v))}});
 
   // 매출 × 신환
   createChart('c-rev-pat', { type:'bar', data:{labels:ML,datasets:[
@@ -98,4 +107,40 @@ function _initRevCharts() {
       tb.innerHTML += `<tr${hl}><td style="font-weight:600">${n}</td><td class="r" style="font-weight:700">${fmtM(revenue[i])}원</td><td class="r">${cmp}</td><td class="r" style="font-weight:700">${patients[i]}명</td><td>${note}</td></tr>`;
     });
   }
+}
+
+function showMonthUploads(month, idx) {
+  const target = document.getElementById('upload-detail');
+  if (!target) return;
+
+  const data = monthlyUploads[month];
+  if (!data || (!data.midform.length && !data.shorts.length)) {
+    target.innerHTML = '<div style="padding:20px;color:var(--g500);text-align:center">이 달에는 업로드가 없었습니다</div>';
+    return;
+  }
+
+  // 미드폼/쇼츠 2열 렌더링
+  const mid = data.midform.sort((a,b) => b.views - a.views);
+  const shorts = data.shorts.sort((a,b) => b.views - a.views);
+
+  target.innerHTML = `
+    <div style="padding:20px;background:var(--g50);border-radius:12px;margin-top:16px">
+      <h4 style="margin-bottom:12px;font-size:14px;color:var(--navy-900)">📅 ${month} — 미드폼 ${mid.length}편 + 쇼츠 ${shorts.length}편</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-weight:700;margin-bottom:8px;font-size:12px;color:var(--patient)">📹 미드폼</div>
+          <div style="font-size:13px;color:var(--g700);display:flex;flex-direction:column;gap:6px">
+            ${mid.map(v => `<div style="display:flex;justify-content:space-between"><span>${v.title}</span> <strong style="color:var(--views)">${fmtV(v.views)}</strong></div>`).join('')}
+            ${mid.length === 0 ? '<div style="color:var(--g400)">없음</div>' : ''}
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:700;margin-bottom:8px;font-size:12px;color:var(--coral)">⚡ 쇼츠</div>
+          <div style="font-size:13px;color:var(--g700);display:flex;flex-direction:column;gap:6px">
+            ${shorts.map(v => `<div style="display:flex;justify-content:space-between"><span>${v.title}</span> <strong style="color:var(--views)">${fmtV(v.views)}</strong></div>`).join('')}
+            ${shorts.length === 0 ? '<div style="color:var(--g400)">없음</div>' : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
 }
