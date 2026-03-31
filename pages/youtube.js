@@ -182,13 +182,13 @@ function _renderInsights() {
   html += `<div class="insight-banner amber-grad" style="margin-bottom:16px">
     <div class="banner-label">📉 조회수 하락 구간</div>
     <div class="banner-headline">2025년 1~3월 — 조회수 7만대 (최저 구간)</div>
-    <div class="banner-body">이 기간 신규 업로드가 거의 없었습니다 (3월에 3편만).<br>기존 영상의 자연 검색 트래픽으로만 유지된 구간으로,<br><strong>업로드 공백이 조회수 하락의 주된 원인으로 보입니다.</strong></div>
+    <div class="banner-body">이 기간 신규 업로드가 거의 없었습니다 (1월 1편, 2월 0편, 3월 1편).<br>기존 영상의 자연 검색 트래픽으로만 유지된 구간으로,<br><strong>업로드 공백이 조회수 하락의 주된 원인으로 보입니다.</strong></div>
   </div>`;
 
   html += `<div class="insight-banner amber-grad" style="margin-bottom:16px">
     <div class="banner-label">📉 조회수 하락 구간</div>
     <div class="banner-headline">2025년 11월 — 조회수 7.8만 (전월 대비 절반)</div>
-    <div class="banner-body">10~11월 업로드가 줄어든 시기입니다 (10월 2편, 11월 0편).<br><strong>쇼츠 위주 업로드로 시청시간이 짧았던 것도 영향이 있을 수 있습니다.</strong></div>
+    <div class="banner-body">이 달 업로드는 미드폼 3편뿐이었고, 쇼츠가 0편이었습니다.<br>10월 4편 → 11월 3편으로 업로드량이 줄면서<br><strong>알고리즘 추천이 감소한 것으로 보입니다.</strong></div>
   </div>`;
 
   el.innerHTML = html;
